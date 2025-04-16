@@ -1,52 +1,58 @@
-import axios, {AxiosInstance} from "axios";
+import axios, { AxiosInstance } from "axios";
 
-export interface requestProps{
+export interface requestProps {
     method: string,
     path: string
     subpath?: string,
-    data?: object
+    dataValues?: object
 }
 
 class AxiosConnection {
 
     private axioConnection: AxiosInstance;
 
-    constructor(){
+    constructor() {
 
         this.axioConnection = axios.create({
-            baseURL:'',
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+            baseURL: 'http://127.0.0.1:8000',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': "application/x-www-form-urlencoded",
+            },
 
         })
     }
 
-    async useAxiosConnection({method, path, subpath, data}:requestProps){
+    async useAxiosConnection({ method, path, subpath, dataValues }: requestProps) {
 
         let finalPath = path;
         if (subpath) finalPath += `/${subpath}`
 
-        if (method === 'GET'){
+        if (method === 'GET') {
             try {
                 const { data } = await this.axioConnection.get(finalPath)
                 return data
+
             } catch (error) {
-                return data
+                return error
             }
-            
+
         }
-        if (method === 'POST'){
+        if (method === 'POST') {
 
             try {
-                return await this.axioConnection.post(finalPath,data)
+                const data = await this.axioConnection.post(finalPath, dataValues)
+                return data
+
             } catch (error) {
-                
+                return error
             }
-            
+
         }
-        if (method === 'PUT'){
+        if (method === 'PUT') {
             return await this.axioConnection.put(finalPath)
         }
-        if (method === 'DELETE'){
+        if (method === 'DELETE') {
             return await this.axioConnection.delete(finalPath)
         }
     }

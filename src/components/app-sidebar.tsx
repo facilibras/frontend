@@ -14,8 +14,12 @@ import {
 
 
 } from "./ui/sidebar"
+import {useUserStore} from '../store/user'
 
 export function AppSidebar() {
+
+    const { states: { user }} = useUserStore();
+
     return (
         <Sidebar>
             <SidebarHeader className="text-center">
@@ -29,6 +33,12 @@ export function AppSidebar() {
                         <Book color="black" size={16} className="mr-2" />
                         <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: 'dias-do-mes' }}>
                             <p className="text-black">Dias do mes</p>
+                        </Link>
+                    </div>
+                    <div className="flex justify-start items-center">
+                        <Book color="black" size={16} className="mr-2" />
+                        <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: 'dias-da-semana' }}>
+                            <p className="text-black">Dias da Semana</p>
                         </Link>
                     </div>
                 </SidebarGroup>
@@ -45,7 +55,7 @@ export function AppSidebar() {
                             <DropdownMenuTrigger asChild>
                                 <SidebarMenuButton className="text-white hover:text-white">
                                     <User2 color="white"/> 
-                                    Username
+                                    {user?.nome_usuario || 'Usuario'}
                                     <ChevronUp className="ml-auto" />
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>

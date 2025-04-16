@@ -1,73 +1,69 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { Button } from '../../components/ui/button';
 import { Camera } from '../../utils/camera';
 import { Hand } from 'lucide-react';
+import { alfabeto } from '../../lib/alfabeto';
+import Layout from '../../components/Layout';
 
 export const Route = createFileRoute('/exercicios/$categoriaExercicio')({
   component: RouteComponent,
 
 })
 
-interface categoriaExercicioProps {
-  letra: string,
-  idGesto: string,
-  titulo: string,
-}
-
 function RouteComponent() {
 
-  const params:categoriaExercicioProps = Route.useParams()
+  const { categoriaExercicio } = Route.useParams()
+  const params = alfabeto.filter((letras) => letras.id == parseInt(categoriaExercicio))
 
   const camera = new Camera();
 
-  let responseexample = {
-    "tema_exercicio": "Dias do Mês",
-    'dificuldade': "Fácil",
-    "exercicio": {
-      "exercício_1": {
-        "palavra": "janeiro",
-        "link_para_demonstracao": "https://linkdemostracaogesto.com", //onde vai estar a demonstração gesto
-        "rota_de_verificacao": "/verificar/exercicios/dias_do_mes" // Ou alguma forma de verificar o gesto
-      },
-      "exercício_2": {
-        "palavra": "fevereiro",
-        "link_para_demonstracao": "https://linkdemostracaogesto.com",
-        "rota_de_verificacao": "/verificar/exercicios/dias_do_mes"
-      },
-      "exercício_3": {
-        "palavra": "março",
-        "link_para_demonstracao": "https://linkdemostracaogesto.com",
-        "rota_de_verificacao": "/verificar/exercicios/dias_do_mes"
-      }
-    }
+  const changeToCamera = () => {
+
   }
 
+  return <Layout children={
+    <div className='flex justify-center items-center flex-col'>
 
+      <div className='w-2/3 bg-gray-200 rounded-3xl shadow-2xl'>
+        <div className='text-center font-bold'>
+          <p > Exercicio: {params[0].param.titulo}</p>
+          <p> Dificuldade: {params[0].param.dificuldade}</p>
+        </div>
 
-  return <div className='w-full h-screen m-auto'>
+        <div className='w-full flex justify-center items-center flex-col'>
+          <p className='text-2xl'>Veja um Tutorial de como deve ser realizado o movimento</p>
+          <iframe
+            src={`https://drive.google.com/file/d/${params[0].param.idGesto}/preview`}
+            width="640"
+            height="480"
+            allow="autoplay"
+          ></iframe>
+          <div className='w-1/3'>
+            <p className='text-2xl'>Agora é sua vez de fazer o movimento</p>
+            <Button onClick={changeToCamera}> Iniciar Captura </Button>
+          </div>
 
+        </div>
+      </div>
 
-    <iframe
-      src={`https://drive.google.com/file/d/${params.idGesto}/preview`}
-      width="640"
-      height="480"
-      allow="autoplay"
-    ></iframe>
-
-    <div className='text-center font-bold'>
-      <p > Exercicio: {params.titulo}</p>
-      <p> Dificuldade: {responseexample.dificuldade}</p>
     </div>
+  } />
 
+}
+
+function CameraComponent(params: any, camera: any) {
+
+  return (
     <div className='bg-blue-300 rounded-xl w-[70%] m-auto p-2'>
       <div className='flex justify-center w-full relative'>
         <div className='absolute top-1 z-10 h-12 w-full flex border-2 border-black rounded'>
           <div className='flex justify-center items-center w-2/3'>
-            <p className='font-bold'>{responseexample.tema_exercicio}</p>
+            <p className='font-bold'>{params[0].param.letra}</p>
           </div>
 
           <div className=''>
             <button className='text-white flex gap-2'>
-              {responseexample.exercicio.exercício_1.palavra}
+              {params[0].param.titulo}
               <Hand></Hand>
             </button>
 
@@ -83,7 +79,6 @@ function RouteComponent() {
         </button>
       </div>
     </div>
-  </div>
-
+  )
 }
 

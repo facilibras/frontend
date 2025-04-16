@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { BookOpen, Book, Lightbulb } from 'lucide-react'
 import { ButtonDashboard } from '../../components/ButtonDashboard'
-import BarraLateral from '../../components/BarraLateral'
+import { useUserStore } from '../../store/user'
 import Layout from '../../components/Layout'
 import Flame from "../../assets/Flame.svg"
 
@@ -11,7 +11,9 @@ export const Route = createFileRoute('/dashboard/')({
 
 function RouteComponent() {
 
-    const UserName = "Samuel"
+    const { states: { user }} = useUserStore();
+
+    const UserName = user?.nome_usuario || 'Usuario'
     const Nivel = 'Iniciante'
     const ProgressoAulas = 1
     const ProgressoExercicios = 50
