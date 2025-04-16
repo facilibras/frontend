@@ -12,10 +12,13 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as TestsIndexImport } from './routes/tests/index'
 import { Route as RegisterIndexImport } from './routes/register/index'
 import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as ExerciciosIndexImport } from './routes/exercicios/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
+import { Route as AulasIndexImport } from './routes/aulas/index'
+import { Route as TestsCameraImport } from './routes/tests/camera'
 import { Route as ExerciciosCategoriaExercicioImport } from './routes/exercicios/$categoriaExercicio'
 
 // Create/Update Routes
@@ -23,6 +26,12 @@ import { Route as ExerciciosCategoriaExercicioImport } from './routes/exercicios
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TestsIndexRoute = TestsIndexImport.update({
+  id: '/tests/',
+  path: '/tests/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -50,6 +59,18 @@ const DashboardIndexRoute = DashboardIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AulasIndexRoute = AulasIndexImport.update({
+  id: '/aulas/',
+  path: '/aulas/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TestsCameraRoute = TestsCameraImport.update({
+  id: '/tests/camera',
+  path: '/tests/camera',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ExerciciosCategoriaExercicioRoute =
   ExerciciosCategoriaExercicioImport.update({
     id: '/exercicios/$categoriaExercicio',
@@ -73,6 +94,20 @@ declare module '@tanstack/react-router' {
       path: '/exercicios/$categoriaExercicio'
       fullPath: '/exercicios/$categoriaExercicio'
       preLoaderRoute: typeof ExerciciosCategoriaExercicioImport
+      parentRoute: typeof rootRoute
+    }
+    '/tests/camera': {
+      id: '/tests/camera'
+      path: '/tests/camera'
+      fullPath: '/tests/camera'
+      preLoaderRoute: typeof TestsCameraImport
+      parentRoute: typeof rootRoute
+    }
+    '/aulas/': {
+      id: '/aulas/'
+      path: '/aulas'
+      fullPath: '/aulas'
+      preLoaderRoute: typeof AulasIndexImport
       parentRoute: typeof rootRoute
     }
     '/dashboard/': {
@@ -103,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterIndexImport
       parentRoute: typeof rootRoute
     }
+    '/tests/': {
+      id: '/tests/'
+      path: '/tests'
+      fullPath: '/tests'
+      preLoaderRoute: typeof TestsIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -111,29 +153,38 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/exercicios/$categoriaExercicio': typeof ExerciciosCategoriaExercicioRoute
+  '/tests/camera': typeof TestsCameraRoute
+  '/aulas': typeof AulasIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/exercicios': typeof ExerciciosIndexRoute
   '/login': typeof LoginIndexRoute
   '/register': typeof RegisterIndexRoute
+  '/tests': typeof TestsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/exercicios/$categoriaExercicio': typeof ExerciciosCategoriaExercicioRoute
+  '/tests/camera': typeof TestsCameraRoute
+  '/aulas': typeof AulasIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/exercicios': typeof ExerciciosIndexRoute
   '/login': typeof LoginIndexRoute
   '/register': typeof RegisterIndexRoute
+  '/tests': typeof TestsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/exercicios/$categoriaExercicio': typeof ExerciciosCategoriaExercicioRoute
+  '/tests/camera': typeof TestsCameraRoute
+  '/aulas/': typeof AulasIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/exercicios/': typeof ExerciciosIndexRoute
   '/login/': typeof LoginIndexRoute
   '/register/': typeof RegisterIndexRoute
+  '/tests/': typeof TestsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -141,45 +192,60 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/exercicios/$categoriaExercicio'
+    | '/tests/camera'
+    | '/aulas'
     | '/dashboard'
     | '/exercicios'
     | '/login'
     | '/register'
+    | '/tests'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/exercicios/$categoriaExercicio'
+    | '/tests/camera'
+    | '/aulas'
     | '/dashboard'
     | '/exercicios'
     | '/login'
     | '/register'
+    | '/tests'
   id:
     | '__root__'
     | '/'
     | '/exercicios/$categoriaExercicio'
+    | '/tests/camera'
+    | '/aulas/'
     | '/dashboard/'
     | '/exercicios/'
     | '/login/'
     | '/register/'
+    | '/tests/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExerciciosCategoriaExercicioRoute: typeof ExerciciosCategoriaExercicioRoute
+  TestsCameraRoute: typeof TestsCameraRoute
+  AulasIndexRoute: typeof AulasIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   ExerciciosIndexRoute: typeof ExerciciosIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   RegisterIndexRoute: typeof RegisterIndexRoute
+  TestsIndexRoute: typeof TestsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExerciciosCategoriaExercicioRoute: ExerciciosCategoriaExercicioRoute,
+  TestsCameraRoute: TestsCameraRoute,
+  AulasIndexRoute: AulasIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   ExerciciosIndexRoute: ExerciciosIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   RegisterIndexRoute: RegisterIndexRoute,
+  TestsIndexRoute: TestsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -194,10 +260,13 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/exercicios/$categoriaExercicio",
+        "/tests/camera",
+        "/aulas/",
         "/dashboard/",
         "/exercicios/",
         "/login/",
-        "/register/"
+        "/register/",
+        "/tests/"
       ]
     },
     "/": {
@@ -205,6 +274,12 @@ export const routeTree = rootRoute
     },
     "/exercicios/$categoriaExercicio": {
       "filePath": "exercicios/$categoriaExercicio.tsx"
+    },
+    "/tests/camera": {
+      "filePath": "tests/camera.tsx"
+    },
+    "/aulas/": {
+      "filePath": "aulas/index.tsx"
     },
     "/dashboard/": {
       "filePath": "dashboard/index.tsx"
@@ -217,6 +292,9 @@ export const routeTree = rootRoute
     },
     "/register/": {
       "filePath": "register/index.tsx"
+    },
+    "/tests/": {
+      "filePath": "tests/index.tsx"
     }
   }
 }
