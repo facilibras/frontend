@@ -1,7 +1,7 @@
-import { jwtDecode } from 'jwt-decode';
 import { create } from 'zustand'
+import { jwtDecodeToken } from '../utils/token';
 
-interface User {
+export interface User {
   id_usuario: string
   nome_usuario: string
   super_usuario: boolean
@@ -19,36 +19,14 @@ interface actionsProps {
 
 interface storeProps {
   actions: actionsProps
-
   states: stateProps
 }
 
-const jwtDecodeToken =  (token: string) => {
-  
-    try {
-        const tokenDecoded: User = jwtDecode(token)
 
-        console.log(tokenDecoded)
-
-        if (tokenDecoded && typeof tokenDecoded !== 'string') {
-            localStorage.setItem('token', token)
-            return tokenDecoded as User;
-        }
-
-        return null;
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 export const useUserStore = create<storeProps>((set) => ({
   actions: {
-    addUser: (user) =>
-      set(() => ({
-        states: {
-          user: jwtDecodeToken(user)
-        },
-      })),
+    addUser: (user) => set(() => ({ states: { user: jwtDecodeToken(user) },})),
     removeUser: () => set(() => ({ states: { user: null } })), 
   },
   states: {

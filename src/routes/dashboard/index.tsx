@@ -5,6 +5,8 @@ import { useUserStore } from '../../store/user'
 import Layout from '../../components/Layout'
 import Flame from "../../assets/Flame.svg"
 
+
+
 export const Route = createFileRoute('/dashboard/')({
     component: RouteComponent,
 })

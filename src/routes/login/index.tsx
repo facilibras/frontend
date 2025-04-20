@@ -29,6 +29,9 @@ function RouteComponent() {
       dataValues:{
         username: nomeInput?.value,
         password: senhaInput?.value
+      },
+      headers:{
+        'Content-Type': "application/x-www-form-urlencoded",
       }
     })
 

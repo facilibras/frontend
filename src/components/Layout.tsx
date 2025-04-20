@@ -1,4 +1,4 @@
-import { SidebarProvider, SidebarTrigger, useSidebar } from "./ui/sidebar"
+import { SidebarProvider, useSidebar } from "./ui/sidebar"
 import { AlignJustify } from 'lucide-react'
 import { AppSidebar } from "./app-sidebar"
 
@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>
+      <main className="w-full">
         <CustomTrigger />
         {children}
       </main>

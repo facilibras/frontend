@@ -4,7 +4,8 @@ export interface requestProps {
     method: string,
     path: string
     subpath?: string,
-    dataValues?: object
+    dataValues?: object,
+    headers?: object
 }
 
 class AxiosConnection {
@@ -17,14 +18,14 @@ class AxiosConnection {
             baseURL: 'http://127.0.0.1:8000',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': "application/x-www-form-urlencoded",
             },
 
         })
     }
 
-    async useAxiosConnection({ method, path, subpath, dataValues }: requestProps) {
+    async useAxiosConnection({ method, path, subpath, dataValues, headers={} }: requestProps) {
 
+        
         let finalPath = path;
         if (subpath) finalPath += `/${subpath}`
 
@@ -41,7 +42,9 @@ class AxiosConnection {
         if (method === 'POST') {
 
             try {
-                const data = await this.axioConnection.post(finalPath, dataValues)
+                const data = await this.axioConnection.post(finalPath, dataValues, {
+                    headers,
+                })
                 return data
 
             } catch (error) {
