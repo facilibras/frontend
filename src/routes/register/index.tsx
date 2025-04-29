@@ -3,6 +3,7 @@ import { Input } from '../../components/ui/input'
 import { Button } from '../../components/ui/button'
 import { backendConnection } from '../../utils/axios'
 import { useNavigate } from '@tanstack/react-router'
+import {toast} from 'react-toastify'
 
 export const Route = createFileRoute('/register/')({
   component: RouteComponent,
@@ -14,11 +15,12 @@ function RouteComponent() {
   const Login = async () => {
 
     const nomeInput = document.getElementById('nome') as HTMLInputElement | null;
+    const emailInput = document.getElementById('email') as HTMLInputElement | null;
     const senhaInput = document.getElementById('senha') as HTMLInputElement | null;
     const senhaInputVerficador = document.getElementById('senhaVerficador') as HTMLInputElement | null;
 
     if (senhaInput?.value !== senhaInputVerficador?.value) {
-      alert('As senhas não coincidem!')
+      toast.warning('As senhas não conferem!')
       return
     }
 
@@ -27,16 +29,24 @@ function RouteComponent() {
       path: '/registrar',
       dataValues: {
         nome: nomeInput?.value,
+        email: emailInput?.value,
         senha: senhaInput?.value,
       }
     })
 
+    console.log(data)
     if (data.status === 200) {
-      alert('Cadastro realizado com sucesso!')
+      
+      toast.success('Cadastro realizado com sucesso!, efetue o login!',{
+        position: 'top-center'
+
+      })
       navigate({ to: '/login' })
     }
     else{
-      alert('Erro ao realizar o cadastro!')
+
+      toast.error(data.response.data.detail) 
+      
     }
   }
 
@@ -47,7 +57,11 @@ function RouteComponent() {
 
       <div>
         <label> Nome </label>
-        <Input placeholder='Digite seu nome ...' type='text' id='nome' />
+        <Input placeholder='Digite seu nome ...' type='text' id='nome' required />
+      </div>
+      <div>
+        <label> Email </label>
+        <Input placeholder='Digite seu email ...' type='email' id='email' required />
       </div>
       <div>
         <label> Senha </label>

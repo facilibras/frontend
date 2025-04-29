@@ -5,22 +5,10 @@ import { Camera } from '../../utils/camera';
 import { backendConnection } from '../../utils/axios';
 import Layout from '../../components/Layout';
 import { useState, useEffect } from 'react';
-import { verifyExpiration, jwtDecodeToken } from '../../utils/token';
 import { exercicio } from '../../const/exercicios.const';
 
 export const Route = createFileRoute('/exercicios/$categoriaExercicio')({
   component: RouteComponent,
-  loader: () => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      const user = jwtDecodeToken(token)
-      if (verifyExpiration(user?.exp)) {
-        console.log('expirado')
-        localStorage.removeItem('token')
-      }
-    }
-  }
-
 })
 
 

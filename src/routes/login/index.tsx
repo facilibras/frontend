@@ -4,6 +4,7 @@ import { Input } from '../../components/ui/input'
 import { Button } from '../../components/ui/button'
 import { useNavigate } from '@tanstack/react-router'
 import {useUserStore} from '../../store/user'
+import { toast } from 'react-toastify'
 
 
 export const Route = createFileRoute('/login/')({
@@ -20,8 +21,6 @@ function RouteComponent() {
 
     const nomeInput = document.getElementById('nome') as HTMLInputElement | null;
     const senhaInput = document.getElementById('senha') as HTMLInputElement | null;
-
-    console.log(nomeInput?.value, senhaInput?.value)
 
     const data = await backendConnection.useAxiosConnection({
       method: 'POST',
@@ -41,7 +40,7 @@ function RouteComponent() {
       navigate({ to: '/dashboard' })
     }
     else {
-      alert('Credenciais inválidas!')
+      toast.error('Erro ao realizar o login!')
     }
   }
 
@@ -53,10 +52,10 @@ function RouteComponent() {
         <p className='font-bold text-center text-2xl'> Bem Vindo de Volta ao Facilibras !</p>
 
         <div>
-          <label> Nome </label>
+          <label> Email </label>
           <Input
             placeholder='Email'
-            type='text'
+            type='email'
             id='nome'
             className='border-black'
           />
