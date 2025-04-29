@@ -4,11 +4,16 @@ import { ButtonDashboard } from '../../components/ButtonDashboard'
 import { useUserStore } from '../../store/user'
 import Layout from '../../components/Layout'
 import Flame from "../../assets/Flame.svg"
-
-
+import { ProtectedRoute } from '../../components/ProtectedRoute'
 
 export const Route = createFileRoute('/dashboard/')({
-    component: RouteComponent,
+    component: () => (
+        <ProtectedRoute>
+            <RouteComponent />
+        </ProtectedRoute>
+    )
+    ,
+    
 })
 
 function RouteComponent() {

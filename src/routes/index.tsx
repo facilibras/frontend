@@ -7,32 +7,12 @@ export const Route = createFileRoute('/')({
 })
 
 function RouteComponent() {
-
-
     return (
-        <div className="p-2 flex w-full justify-center items-center h-screen">
-            <div className='h-2/3 w-2/3 bg-gray-200 rounded-3xl shadow-2xl flex justify-center items-center gap-4'>
-                <div className='w-2/3 p-8'>
-                    <h2 className='font-bold text-2xl text-center'>Bem vindo ao Facilibras</h2>
-
-                    <p className='text-sm indent-4'>
-                        Nossa ferramenta utiliza tecnologia avançada para guiar você no aprendizado dos sinais,
-                        corrigindo movimentos e garantindo precisão. Aprenda no seu ritmo, 
-                        pratique com exercícios dinâmicos e receba feedback instantâneo para evoluir rapidamente. 
-                        Conecte-se com a comunidade surda e ouvinte de forma inclusiva e eficiente.
-                    </p>
-                    <div className='flex flex-col gap-2 mt-4 w-1/2'>
-                        <Link to="/login" className='bg-blue-500 p-2 rounded-md'>
-                            <p className='text-white text-center'>Login</p>
-                        </Link>
-                        <Link to="/register" className='bg-blue-500 p-2 rounded-md'>
-                            <p className='text-white text-center'> Registrar</p>
-                        </Link>
-                    </div>
-                </div>
-                <div className='w-1/2'>
+        <div className="p-6 flex w-full justify-center items-center h-screen">
+            <div className='h-fit min-w-[320px] w-full max-w-[840px] bg-gray-200 rounded-3xl shadow-2xl flex flex-col md:flex-row justify-center items-center gap-4'>
+                <div className='w-full md:h-[380px] md:w-1/2 md:rounded-r-3xl md:rounded-t-none flex items-center justify-center rounded-t-3xl bg-blue-500 md:order-2'>
                     {/* FRAME 1 */}
-                    <div className='w-[70%]'>
+                    <div className='w-[50%]'>
                         <svg width="100%" height="100%" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="Frame 1">
                                 <g id="LibraLogo">
@@ -45,6 +25,32 @@ function RouteComponent() {
                                 </g>
                             </g>
                         </svg>
+                    </div>
+                </div>
+
+                <div className='w-2/3 md:w-1/2 py-4 md:px-4 flex flex-col justify-center items-center gap-4'>
+                    <h2 className='font-bold text-2xl text-center'>Bem vindo ao Facilibras</h2>
+
+                    <p className='text-sm indent-4 text-justify'>
+                        Nossa ferramenta utiliza tecnologia avançada para guiar você no aprendizado dos sinais,
+                        corrigindo movimentos e garantindo precisão. Aprenda no seu ritmo, 
+                        pratique com exercícios dinâmicos e receba feedback instantâneo para evoluir rapidamente. 
+                        Conecte-se com a comunidade surda e ouvinte de forma inclusiva e eficiente.
+                    </p>
+                    <div className='flex flex-col gap-2 mt-4 w-full'>
+                        <Link to="/login" className='bg-green-500 p-2 rounded-md'>
+                            <p className='text-white text-center'>Login</p>
+                        </Link>
+
+                        <div className='flex items-center w-full'>
+                            <div className='flex-grow h-[1px] bg-gray-500'></div>
+                            <p className='text-sm text-gray-500 mx-2'>ou</p>
+                            <div className='flex-grow h-[1px] bg-gray-500'></div>
+                        </div>
+
+                        <Link to="/register" className='bg-blue-500 p-2 rounded-md'>
+                            <p className='text-white text-center'> Registrar</p>
+                        </Link>
                     </div>
                 </div>
             </div>

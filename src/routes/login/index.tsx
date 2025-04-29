@@ -47,39 +47,42 @@ function RouteComponent() {
 
 
 
-  return <div className='p-2 flex w-full justify-center items-center h-screen'>
+  return (
+    <div className='p-6 flex w-full justify-center items-center h-screen'>
+      <div className='min-w-[320px] w-full max-w-[640px] h-fit bg-gray-200 rounded-3xl shadow-2xl flex flex-col gap-4 p-4'>
+        <p className='font-bold text-center text-2xl'> Bem Vindo de Volta ao Facilibras !</p>
 
-    <div className='w-1/2 h-2/3 bg-gray-200 rounded-3xl shadow-2xl flex flex-col gap-4 p-4'>
-      <p className='font-bold text-center text-2xl'> Bem Vindo de Volta ao Facilibras !</p>
+        <div>
+          <label> Nome </label>
+          <Input
+            placeholder='Email'
+            type='text'
+            id='nome'
+            className='border-black'
+          />
+        </div>
+        <div>
+          <label htmlFor=""> Senha </label>
+          <Input
+            placeholder='Senha'
+            type='password'
+            className='border-black'
+            id='senha'
+          />
+        </div>
 
+        <Button onClick={realizarLogin}> Entrar </Button>
 
-      <div>
-        <label> Nome </label>
-        <Input
-          placeholder='Email'
-          type='text'
-          id='nome'
-          className='border-black'
-        />
-      </div>
-      <div>
-        <label htmlFor=""> Senha </label>
-        <Input
-          placeholder='Senha'
-          type='password'
-          className='border-black'
-          id='senha'
-        />
-      </div>
+        <div className='flex-grow h-[1px] bg-gray-500'/>
 
-      <Button onClick={realizarLogin}> Entrar </Button>
+        <div className='flex flex-col items-start justify-center gap-2'>
+          <p>Ainda não faz parte? <Link to='/register'>Cadastre-se</Link></p>
+          
+          <small className='text-red-800 text-sm'>Esqueceu a senha? <span className='underline'>Clique aqui</span></small>
+        </div>
 
-      <div className='flex flex-col items-start justify-center gap-2 mt-4'>
-        <p>Esqueceu a senha?</p>
-        <p>Ainda não faz parte <Link to='/register'>Cadastre-se</Link></p>
       </div>
 
     </div>
-
-  </div>
+  )
 }

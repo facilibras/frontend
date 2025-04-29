@@ -1,13 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
 import Layout from '../../components/Layout'
+import {alfabeto} from '../../lib/alfabeto'
+import { ProtectedRoute } from '../../components/ProtectedRoute'
 import { backendConnection } from '../../utils/axios'
 import { useEffect, useState } from 'react'
 import { exercicio, secao } from '../../const/exercicios.const'
 import { X, CheckCheck } from 'lucide-react'
 
 export const Route = createFileRoute('/exercicios/')({
-  component: RouteComponent,
+  component: () => (
+    <ProtectedRoute>
+        <RouteComponent />
+    </ProtectedRoute>
+)
 })
 
 function RouteComponent() {

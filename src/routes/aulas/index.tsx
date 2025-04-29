@@ -1,8 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import Layout from '../../components/Layout'
+import { ProtectedRoute } from '../../components/ProtectedRoute'
 
 export const Route = createFileRoute('/aulas/')({
-  component: RouteComponent,
+  component: () => (
+    <ProtectedRoute>
+        <RouteComponent />
+    </ProtectedRoute>
+)
 })
 
 function RouteComponent() {
