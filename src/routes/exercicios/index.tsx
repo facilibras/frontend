@@ -2,9 +2,14 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
 import Layout from '../../components/Layout'
 import {alfabeto} from '../../lib/alfabeto'
+import { ProtectedRoute } from '../../components/ProtectedRoute'
 
 export const Route = createFileRoute('/exercicios/')({
-  component: RouteComponent,
+  component: () => (
+    <ProtectedRoute>
+        <RouteComponent />
+    </ProtectedRoute>
+)
 })
 
 

@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { ToastContainer } from 'react-toastify';
 
 
 export const Route = createRootRoute({
@@ -10,7 +11,9 @@ function RootComponent() {
 
   return (
     <React.Fragment>
-      <Outlet />
+        <ToastContainer />
+
+        <Outlet />
     </React.Fragment>
   )
 }

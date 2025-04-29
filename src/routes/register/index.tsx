@@ -40,11 +40,10 @@ function RouteComponent() {
     }
   }
 
-  return <div className='p-2 flex w-full justify-center items-center h-screen'>
+  return <div className='p-6 flex w-full justify-center items-center h-screen'>
 
-    <div className='w-1/2 h-2/3 bg-gray-200 rounded-3xl shadow-2xl flex flex-col gap-4 p-4'>
+    <div className='min-w-[320px] w-full max-w-[640px] h-fit bg-gray-200 rounded-3xl shadow-2xl flex flex-col gap-4 p-4'>
       <p className='font-bold text-center text-2xl'> Registre-Se Agora !</p>
-
 
       <div>
         <label> Nome </label>
