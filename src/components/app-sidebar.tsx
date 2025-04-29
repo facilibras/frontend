@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router"
-import { Book, User2,ChevronUp } from "lucide-react"
-import { DropdownMenu,DropdownMenuTrigger,DropdownMenuContent,DropdownMenuItem } from "./ui/dropdown-menu"
+import { Book, User2, ChevronUp } from "lucide-react"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
 import {
     Sidebar,
     SidebarContent,
@@ -14,11 +14,31 @@ import {
 
 
 } from "./ui/sidebar"
-import {useUserStore} from '../store/user'
+import { useUserStore } from '../store/user'
+import { useEffect, useState } from "react"
+import { backendConnection } from "../utils/axios"
+import { exercicio } from "../const/exercicios.const"
 
 export function AppSidebar() {
 
-    const { states: { user }} = useUserStore();
+    const { states: { user } } = useUserStore();
+
+    const [exercicios, setExercicios] = useState<exercicio[]>([])
+
+    async function getExercicios() {
+
+        const getexercicios = await backendConnection.useAxiosConnection({
+            method: 'GET',
+            path: '/exercicios',
+        })
+        if (getexercicios) {
+            setExercicios(getexercicios)
+        }
+    }
+
+    useEffect(() => {
+        getExercicios()
+    }, [])
 
     return (
         <Sidebar>
@@ -28,19 +48,20 @@ export function AppSidebar() {
             <SidebarContent>
                 <SidebarGroup >
                     <SidebarGroupLabel>Exercícios</SidebarGroupLabel>
-
-                    <div className="flex justify-start items-center">
-                        <Book color="black" size={16} className="mr-2" />
-                        <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: 'dias-do-mes' }}>
-                            <p className="text-black">Dias do mes</p>
-                        </Link>
-                    </div>
-                    <div className="flex justify-start items-center">
-                        <Book color="black" size={16} className="mr-2" />
-                        <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: 'dias-da-semana' }}>
-                            <p className="text-black">Dias da Semana</p>
-                        </Link>
-                    </div>
+                    {
+                        exercicios.map((exercicio, index) => {
+                            if (exercicio.status == null && index < 10) {
+                                return (
+                                    <div className="flex justify-start items-center" key={exercicio.titulo}>
+                                        <Book color="black" size={16} className="mr-2" />
+                                        <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: exercicio.titulo }}>
+                                            <p className="text-black"> {exercicio.titulo} </p>
+                                        </Link>
+                                    </div>
+                                )
+                            }
+                        })
+                    }
                 </SidebarGroup>
                 <SidebarGroup >
                     <SidebarGroupLabel>
@@ -54,7 +75,7 @@ export function AppSidebar() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <SidebarMenuButton className="text-white hover:text-white">
-                                    <User2 color="white"/> 
+                                    <User2 color="white" />
                                     {user?.nome_usuario || 'Usuario'}
                                     <ChevronUp className="ml-auto" />
                                 </SidebarMenuButton>

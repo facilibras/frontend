@@ -22,16 +22,16 @@ function RouteComponent() {
 
     const UserName = user?.nome_usuario || 'Usuario'
     const Nivel = 'Iniciante'
-    const ProgressoAulas = 1
+    const ProgressoAulas = 20
     const ProgressoExercicios = 50
     const diasOfensiva = 10
 
-    const progresso = `bg-blue-950 w-[${ProgressoAulas}%] h-full rounded-xl`
+    const progresso = `bg-black w-[${ProgressoAulas}%] h-full rounded-xl`
 
     return <Layout children={
         <div className='flex flex-col'>
             <div className=' flex flex-wrap lg:flex-nowrap mb-5'>
-                <div className='bg-purple-950 rounded-3xl w-full lg:w-1/2 h-auto m-2 p-4'> {/* Informações do usuario */}
+                <div className='bg-blue-600 rounded-3xl w-full lg:w-1/2 h-auto m-2 p-4'> {/* Informações do usuario */}
                     <div className='flex'> {/* Imagem e nome do usuario */}
                         <img className='rounded-full ' src="21.png" alt="" />
                         <div className='ml-2'>
@@ -55,8 +55,8 @@ function RouteComponent() {
                                 <p className='text-white'>Exercicios</p> <p className='text-white'>{ProgressoExercicios}%</p>
                             </div>
                             <div className=''> {/* Barra de progresso */}
-                                <div className='bg-purple-600 w-full h-2 rounded-xl'>
-                                    <div className='bg-purple-900 w-1/2 h-full rounded-xl'></div>
+                                <div className='bg-white w-full h-2 rounded-xl'>
+                                    <div className='bg-black w-1/2 h-full rounded-xl'></div>
                                 </div>
                             </div>
                         </div>
@@ -65,16 +65,16 @@ function RouteComponent() {
                 <div className='flex w-full lg:w-1/2 h[220px]'> {/* Noticias */}
 
                     <div className=' w-1/2 h-full'> {/* Novidades */}
-                        <div className='bg-purple-950 h-1/2 rounded-3xl m-2 p-3'>
+                        <div className='bg-blue-600 h-1/2 rounded-3xl m-2 p-3'>
                             <p className='text-white font-bold text-2xl'>
                                 Mais 50 Palavras adicionadas no nosso dicionario na ultima semana
                             </p>
                         </div>
-                        <div className='bg-purple-950 h-1/2 rounded-3xl m-2 p-10'>
+                        <div className='bg-blue-600 h-1/2 rounded-3xl m-2 p-10'>
                             <p className='text-white font-bold text-2xl'> Novo Quiz disponivel</p>
                         </div>
                     </div>
-                    <div className='p-5 w-1/2 h-full relative bg-purple-950 rounded-3xl m-2 overflow-hidden z-10'> {/* Ofensiva */}
+                    <div className='p-5 w-1/2 h-full relative bg-blue-600 rounded-3xl m-2 overflow-hidden z-10'> {/* Ofensiva */}
 
                         <div className='relative z-10'>
                             <p className='w-full font-bold p-2 text-white text-2xl text-center'>
@@ -92,7 +92,7 @@ function RouteComponent() {
                 <ButtonDashboard nome='Aulas' Icone={BookOpen} rota='/aulas/' />
                 <ButtonDashboard nome='Exercicios' Icone={Book} rota='/exercicios/' />
                 <ButtonDashboard nome='Quiz Diario' Icone={Lightbulb} rota='/quiz/' />
-                <div className='bg-purple-600 w-full h-32 rounded-xl'>
+                <div className='bg-blue-400 w-full h-32 rounded-xl'>
                     <h2>Ranking </h2>
                 </div>
             </div>
