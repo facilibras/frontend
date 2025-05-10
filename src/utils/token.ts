@@ -10,7 +10,6 @@ export const jwtDecodeToken =  (token: string) => {
         console.log(tokenDecoded)
 
         if (tokenDecoded && typeof tokenDecoded !== 'string') {
-            localStorage.setItem('token', token)
             return tokenDecoded as User;
         }
 

@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
 import { exercicio } from "../const/exercicios.const";
+import { AlertCircleIcon } from 'lucide-react'
 
 
 interface tutorialCompProps {
@@ -11,9 +12,13 @@ export default function TutorialComp({ exercicio, setSwitchToCamera }: tutorialC
 
   return (
     <div className='w-3/4 bg-gray-200 rounded-3xl'>
-      <div className='text-center font-bold'>
-        <p className='text-2xl'> Exercicio: {exercicio.titulo}</p>
-        <p> Dificuldade: {exercicio.titulo}</p>
+      <div className="flex items-center justify-center relative">
+        <div className='text-center font-bold'>
+          <p className='text-2xl'> Exercicio: {exercicio.titulo.split('_')[0]} {exercicio.titulo.replace("_", " ").split(" ")[1].toUpperCase()}</p>
+        </div>
+        <div className="absolute right-5">
+          <AlertCircleIcon />
+        </div>
       </div>
 
 

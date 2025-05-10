@@ -9,7 +9,6 @@ export interface requestProps {
 }
 
 class AxiosConnection {
-
     private axioConnection: AxiosInstance;
 
     constructor() {
@@ -20,6 +19,16 @@ class AxiosConnection {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
 
+        })
+
+        this.axioConnection.interceptors.request.use((config) => {
+            const token = localStorage.getItem('token')
+
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`
+            }
+
+            return config;
         })
     }
 
@@ -59,6 +68,8 @@ class AxiosConnection {
             return await this.axioConnection.delete(finalPath)
         }
     }
+
+
 }
 
 export const backendConnection = new AxiosConnection()

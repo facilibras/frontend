@@ -4,6 +4,7 @@ import { exercicio } from "../const/exercicios.const"
 import { Camera } from "../utils/camera"
 import { useEffect, useState } from "react"
 import { backendConnection } from "../utils/axios"
+import { toast } from "react-toastify"
 
 interface CameraCompProps {
   exercicio: exercicio,
@@ -41,7 +42,7 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
 
         if (response.status === 200) {
           console.log(response.data);
-          alert(response.data.mensagem);
+          toast.success(response.data.mensagem)
         } else {
           console.error('Erro no upload:', response.statusText);
         }

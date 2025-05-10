@@ -6,9 +6,13 @@ import { backendConnection } from '../../utils/axios';
 import Layout from '../../components/Layout';
 import { useState, useEffect } from 'react';
 import { exercicio } from '../../const/exercicios.const';
+import { ProtectedRoute } from '../../components/ProtectedRoute';
 
 export const Route = createFileRoute('/exercicios/$categoriaExercicio')({
-  component: RouteComponent,
+  component: ()=> 
+    <ProtectedRoute>
+      <RouteComponent/>
+    </ProtectedRoute>,
 })
 
 

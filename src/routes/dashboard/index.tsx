@@ -26,7 +26,7 @@ function RouteComponent() {
     const ProgressoExercicios = 50
     const diasOfensiva = 10
 
-    const progresso = `bg-black w-[${ProgressoAulas}%] h-full rounded-xl`
+    const progresso = `bg-black w-[${ProgressoAulas}%] rounded-xl`
 
     return <Layout children={
         <div className='flex flex-col'>
@@ -36,7 +36,7 @@ function RouteComponent() {
                         <img className='rounded-full ' src="21.png" alt="" />
                         <div className='ml-2'>
                             <p className='font-bold text-3xl text-white'> Bem Vindo {UserName}</p>
-                            <p className='text-white text-2xl'> Nivél : {Nivel}</p>
+                            <p className='text-white text-2xl'> Nível : {Nivel}</p>
                         </div>
                     </div>
                     <div className='m-3'> {/* Progresso do usuario */}
@@ -44,10 +44,10 @@ function RouteComponent() {
                             <div className='flex justify-between'>
                                 <p className='text-white'>Aulas</p> <p className='text-white'>{ProgressoAulas}%</p>
                             </div>
-                            <div className=''> {/* Barra de progresso */}
+                            <div className='w-full'> {/* Barra de progresso */}
                                 <div className='bg-white w-full h-2 rounded-xl'>
-                                    <div className={progresso}></div>
                                 </div>
+                                <div className='bg-black w-full rounded-xl'></div>
                             </div>
                         </div>
                         <div>

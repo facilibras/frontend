@@ -35,7 +35,9 @@ function RouteComponent() {
     })
 
     if (data.status === 200) {
-
+      
+      localStorage.setItem('token', data.data.token)
+      
       addUser(data.data.token)
       navigate({ to: '/dashboard' })
     }
@@ -48,7 +50,7 @@ function RouteComponent() {
 
   return (
     <div className='p-6 flex w-full justify-center items-center h-screen'>
-      <div className='min-w-[320px] w-full max-w-[640px] h-fit bg-gray-200 rounded-3xl shadow-2xl flex flex-col gap-4 p-4'>
+      <div className='min-w-[320px] w-full max-w-[640px] h-fit bg-gray-200 rounded-2xl shadow-2xl flex flex-col gap-4 p-4'>
         <p className='font-bold text-center text-2xl'> Bem Vindo de Volta ao Facilibras !</p>
 
         <div>

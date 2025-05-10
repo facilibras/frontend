@@ -18,11 +18,13 @@ import { useUserStore } from '../store/user'
 import { useEffect, useState } from "react"
 import { backendConnection } from "../utils/axios"
 import { exercicio } from "../const/exercicios.const"
+import { useNavigate } from "@tanstack/react-router"
 
 export function AppSidebar() {
 
     const { states: { user } } = useUserStore();
 
+    const navigate = useNavigate()
     const [exercicios, setExercicios] = useState<exercicio[]>([])
 
     async function getExercicios() {
@@ -40,6 +42,11 @@ export function AppSidebar() {
         getExercicios()
     }, [])
 
+    const Deslogar = () => {
+        localStorage.removeItem("token")
+        navigate({to:"/login"})
+    }
+
     return (
         <Sidebar>
             <SidebarHeader className="text-center">
@@ -55,7 +62,7 @@ export function AppSidebar() {
                                     <div className="flex justify-start items-center" key={exercicio.titulo}>
                                         <Book color="black" size={16} className="mr-2" />
                                         <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: exercicio.titulo }}>
-                                            <p className="text-black"> {exercicio.titulo} </p>
+                                            <p className="text-black">{exercicio.titulo.split('_')[0]} {exercicio.titulo.replace("_"," ").split(" ")[1].toUpperCase()} </p>
                                         </Link>
                                     </div>
                                 )
@@ -84,14 +91,8 @@ export function AppSidebar() {
                                 side="top"
                                 className="w-[--radix-popper-anchor-width]"
                             >
-                                <DropdownMenuItem>
-                                    <span>Account</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <span>Billing</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <span>Sign out</span>
+                                <DropdownMenuItem onClick={Deslogar}>
+                                    <span> Sair </span>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
