@@ -1,7 +1,7 @@
-import * as React from 'react'
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { ToastContainer } from 'react-toastify';
 import { useUserStore } from '../store/user';
+import React from 'react';
 
 
 export const Route = createRootRoute({
@@ -9,7 +9,7 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
-  const { states: { user }, actions: { addUser }} = useUserStore();
+  const { actions: { addUser }} = useUserStore();
 
   React.useEffect(() => {
     const token = localStorage.getItem('token') as string 
@@ -23,10 +23,10 @@ function RootComponent() {
   }, [])
 
   return (
-    <React.Fragment>
+    <div className="bg-neutral-200">
         <ToastContainer />
 
-        <Outlet />
-    </React.Fragment>
+        <Outlet/>
+    </div>
   )
 }

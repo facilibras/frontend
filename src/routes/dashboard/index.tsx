@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { BookOpen, Book, Lightbulb } from 'lucide-react'
+import { BookOpen, Book, Lightbulb, AlignStartVertical } from 'lucide-react'
 import { ButtonDashboard } from '../../components/ButtonDashboard'
 import { useUserStore } from '../../store/user'
 import Layout from '../../components/Layout'
@@ -12,8 +12,6 @@ export const Route = createFileRoute('/dashboard/')({
             <RouteComponent />
         </ProtectedRoute>
     )
-    ,
-    
 })
 
 function RouteComponent() {
@@ -62,20 +60,12 @@ function RouteComponent() {
                         </div>
                     </div>
                 </div>
-                <div className='flex w-full lg:w-1/2 h[220px]'> {/* Noticias */}
-
-                    <div className=' w-1/2 h-full'> {/* Novidades */}
-                        <div className='bg-blue-600 h-1/2 rounded-3xl m-2 p-3'>
-                            <p className='text-white font-bold text-2xl'>
-                                Mais 50 Palavras adicionadas no nosso dicionario na ultima semana
-                            </p>
-                        </div>
-                        <div className='bg-blue-600 h-1/2 rounded-3xl m-2 p-10'>
-                            <p className='text-white font-bold text-2xl'> Novo Quiz disponivel</p>
-                        </div>
+                <div className='flex w-full h-full'> {/* Noticias */}
+                    <div className='bg-blue-600 h-[320px] rounded-3xl m-2 flex items-center justify-center w-full cursor-pointer hover:bg-blue-700 transition-all duration-300'> {/* Novo Quiz */}
+                        <p className='text-white font-bold text-2xl'> Novo Quiz disponivel</p>
                     </div>
-                    <div className='p-5 w-1/2 h-full relative bg-blue-600 rounded-3xl m-2 overflow-hidden z-10'> {/* Ofensiva */}
 
+                    <div className='p-5 w-full relative bg-blue-600 rounded-3xl m-2 overflow-hidden z-10 grow h-[320px]'> {/* Ofensiva */}
                         <div className='relative z-10'>
                             <p className='w-full font-bold p-2 text-white text-2xl text-center'>
                                 Não deixe sua ofensiva acabar!
@@ -89,12 +79,19 @@ function RouteComponent() {
                 </div>
             </div>
             <div className='flex flex-wrap lg:flex-nowrap gap-2 m-2'> {/* Botões */}
-                <ButtonDashboard nome='Aulas' Icone={BookOpen} rota='/aulas/' />
-                <ButtonDashboard nome='Exercicios' Icone={Book} rota='/exercicios/' />
-                <ButtonDashboard nome='Quiz Diario' Icone={Lightbulb} rota='/quiz/' />
-                <div className='bg-blue-400 w-full h-32 rounded-xl'>
-                    <h2>Ranking </h2>
-                </div>
+                <ButtonDashboard nome='Aulas' Icone={BookOpen} rota='/aulas/'/>
+                <ButtonDashboard nome='Exercícios' Icone={Book} rota='/exercicios/' />
+                <ButtonDashboard nome='Quiz Diário' Icone={Lightbulb} rota='/quiz/' />
+                <ButtonDashboard nome='Ranking' Icone={AlignStartVertical} rota='/quiz/' />
+            </div>
+
+            <div className='flex items-center justify-items-start gap-2'>
+                 {/* Novidades */}
+                    <div className='bg-blue-600 h-1/2 rounded-3xl m-2 p-13 w-full'>
+                        <p className='text-white font-bold text-2xl text-center'>
+                            Mais 50 Palavras adicionadas no nosso dicionario na ultima semana
+                        </p>
+                    </div>
             </div>
         </div>
     } />

@@ -15,19 +15,14 @@ interface CameraCompProps {
 
 export default function CameraComponent({ exercicio, camera, setSwitchToCamera }: CameraCompProps) {
 
-  const [countdown, setCountdown] = useState<number | null>(null);
+  const [countdown, setCountdown] = useState<number>(0);
   const [Mensagem, setMensagem] = useState(exercicio.titulo)
   const [video, setVideo] = useState<FormData | null>(null)
-
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
 
   useEffect(() => {
     const uploadVideo = async () => {
       if (!video) return;
-
-      const blob = video.get('video') as Blob;
-      const url = URL.createObjectURL(blob);
-      setPreviewUrl(url);
 
       try {
         const response = await backendConnection.useAxiosConnection({
@@ -55,6 +50,8 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
   }, [video]);
 
   const startCountdown = async (tempoGravacao: number) => {
+    setIsRecording(true);
+
     const videoElement = document.getElementById("video") as HTMLVideoElement;
     if (!videoElement) {
       console.error("Video element not found!");
@@ -70,9 +67,10 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
       const contageminicial = setInterval(() => {
         setMensagem("Se prepare para Realizar o Movimento");
         setCountdown((prev) => {
-          if (prev !== null) {
             if (prev <= 1) {
               clearInterval(contageminicial);
+
+              setMensagem("Muito bem!")
               
               setMensagem("Realize o Movimento ")
               camera.gravarVideo({
@@ -82,23 +80,21 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
               }).then((videoData: FormData) => {
                 setVideo(videoData);
               });
+
+              setIsRecording(false);
+
               return 0;
             }
             return prev - 1;
-          }
-          return null;
         });
       }, 1000);
     };
-
-
-
   };
 
   return (
-    <div className='bg-gray-200 rounded-xl w-2/3 m-auto p-2'>
+    <div className='flex flex-col justify-center items-center gap-4 mt-10 bg-neutral-200 rounded-3xl shadow-2xl w-2/3 m-auto p-5'>
 
-      {countdown !== null && (
+      {countdown > 0 && (
         <p className="text-3xl text-center font-bold">{countdown}</p>
       )}
 
@@ -106,28 +102,23 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
         <div className='flex justify-center items-centerw-2/3'>
           <p className='font-bold h-full'>{Mensagem}</p>
         </div>
+      </div>
 
-        <div className=''>
+      { isRecording && 
+        <div className='flex justify-center w-full relative'>
+          <video className='lg:w-[680px] transform scale-x-[-1]' id='video'></video>
+        </div>
+      }
+
+      <div className='flex justify-between items-center w-full'>
+        <Button className='text-white' onClick={() => startCountdown(3)}> Iniciar Aula </Button>
+
           <Button className='text-white flex gap-2'
             onClick={() => setSwitchToCamera(false)}>
             Tutorial
             <Hand />
           </Button>
-        </div>
       </div>
-      <div className='flex justify-center w-full relative'>
-
-        <video className='lg:w-[680px] transform scale-x-[-1]' id='video'></video>
-      </div>
-      <div className='flex justify-center items-center'>
-        <Button className='text-white' onClick={() => startCountdown(3)}> Iniciar Aula </Button>
-        <Button id='stopButton'> Stop </Button>
-      </div>
-
-
-      {previewUrl && (
-        <video src={previewUrl} controls width="400" />
-      )}
     </div>
   )
 }
