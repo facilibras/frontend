@@ -5,17 +5,35 @@ import { ProtectedRoute } from '../../components/ProtectedRoute'
 import { backendConnection } from '../../utils/axios'
 import { useEffect, useState } from 'react'
 import { exercicio, secao } from '../../const/exercicios.const'
-import { X, CheckCheck } from 'lucide-react'
+import { X, CheckCheck, Hand, CirclePlay, ArrowRight } from 'lucide-react'
 import { Separator } from '../../components/ui/separator'
 import { Checkbox } from '../../components/ui/checkbox'
 
 export const Route = createFileRoute('/exercicios/')({
   component: () => (
     <ProtectedRoute>
-        <RouteComponent />
+      <RouteComponent />
     </ProtectedRoute>
-)
+  )
 })
+
+const categoriaColor : any = {
+  "Alfabeto":{
+    texto: "text-blue-600",
+    bg: "bg-blue-50",
+    bgColor: "bg-blue-600"
+  },
+  "Números": { //["bg-green-50", "text-green-600", "bg-green-600"],
+    texto: "text-green-600",
+    bg: "bg-green-50",
+    bgColor: "bg-green-600"
+  },
+  "Animais": {
+    texto: "text-red-600",
+    bg: "bg-red-50",
+    bgColor: "bg-red-600"
+  },
+}
 
 function RouteComponent() {
 
@@ -66,60 +84,91 @@ function RouteComponent() {
     <div className="flex w-full items-center flex-col gap-4 mt-4 p-5">
       <p className='font-bold text-3xl text-left w-full'> Exercícios </p>
 
-        <div className='flex gap-2 justify-start items-center w-full'>
-          {
-            secoes.map((secao, index) => (
-              <div className='flex gap-3 justify-start items-center rounded-md border border-slate-300 py-0.5 px-2.5 text-center text-sm transition-all shadow-sm text-slate-600' key={index}>
-                {secao.nome}
-                <div className='rounded-full bg-gray-300 px-1 flex items-center justify-center'>
-                  {secao.qtd_ex}
-                </div>
+      <div className='flex gap-2 justify-start items-center w-full'>
+        {
+          secoes.map((secao, index) => (
+            <div className='flex gap-3 justify-start items-center rounded-md border border-slate-300 py-0.5 px-2.5 text-center text-sm transition-all shadow-sm text-slate-600' key={index}>
+              {secao.nome}
+              <div className='rounded-full bg-gray-300 px-1 flex items-center justify-center'>
+                {secao.qtd_ex}
               </div>
-            ))
-          }
-        </div>
+            </div>
+          ))
+        }
+      </div>
 
-        <div className='flex flex-col justify-center items-start gap-4 w-full'>
+      <div className='flex flex-col justify-center items-start gap-4 w-full'>
 
-          { secoes.map(secao => (
-            <div className='flex flex-col gap-2 w-full border' key={secao.nome}>
-              <p className='text-xl font-bold'> { secao.nome } </p>
+        {secoes.map(secao => (
+          <div className='flex flex-col gap-2 w-full border' key={secao.nome}>
+            <p className='text-xl font-bold'> {secao.nome} </p>
 
-              <Separator className='w-full bg-neutral-500'/>
+            <Separator className='w-full bg-neutral-500' />
 
-              <div className='flex gap-2 justify-between items-center cursor-pointer' onClick={() => handleChecked(secao.nome)}>
-                <p className='text-lg'>
-                  Fácil
-                </p>
+            <div className='flex gap-2 justify-between items-center cursor-pointer' onClick={() => handleChecked(secao.nome)}>
+              <p className='text-lg'>
+                Fácil
+              </p>
 
-                <Checkbox id={secao.nome} checked={checkeds.includes(secao.nome)} className='border border-black'/>
-              </div>
+              <Checkbox id={secao.nome} checked={checkeds.includes(secao.nome)} className='border border-black' />
+            </div>
 
-              <div className={`flex-col gap-2 justify-center items-start rounded-md w-full ${ checkeds.includes(secao.nome) ? 'opacity-100 flex pointer-events-auto': 'opacity-0 hidden pointer-events-none' } transition-all duration-500 ease`}>
-                {exercicios.map(exercicio => (
-                  <>
-                    {exercicio.secao == secao.nome && (
-                      <Link to='/exercicios/$categoriaExercicio' params={{ categoriaExercicio: exercicio.titulo }} key={exercicio.titulo} className='w-full'>
-                        <div className='w-full flex justify-between gap-2 bg-gray-300 rounded-2xl p-6'>
-                          <div>
-                            <h2 className='font-bold text-2xl text-black'> {exercicio.titulo.split('_')[0]} {exercicio.titulo.replace("_"," ").split(" ")[1].toUpperCase()} </h2>
-                            <p> {exercicio.descricao}</p>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ${checkeds.includes(secao.nome) ? 'opacity-100 flex pointer-events-auto' : 'opacity-0 hidden pointer-events-none'} transition-all duration-500 ease`}>
+              {exercicios.map(exercicio => (
+                <>
+                  {exercicio.secao == secao.nome && (
+                    <Link to='/exercicios/$categoriaExercicio' params={{ categoriaExercicio: exercicio.titulo }} key={exercicio.titulo} className='w-full'>
+
+                      <div className="sign-card bg-white rounded-xl shadow-md overflow-hidden" data-category="basico">
+                        <div className={`h-48 ${categoriaColor[exercicio.secao].bg} flex items-center justify-center relative`}>
+                          <div className="flex flex-col items-center justify-center h-full">
+                            
+                            <Hand className={`${categoriaColor[exercicio.secao].texto}`} size={50} />
+                            <p className={`font-medium ${categoriaColor[exercicio.secao].texto}`}> Praticar agora </p>
                           </div>
-                          <div>
-                            {
-                              exercicio.status == null ? <X color='red' /> : <CheckCheck color='green' />
-                            }
+                          <span 
+                            className={`absolute top-3 left-3 ${categoriaColor[exercicio.secao].bgColor} text-white text-xs px-2 py-1 rounded`}
+                          > 
+                              Básico 
+                          </span>
+                        </div>
+                        <div className="p-4">
+                          <div className='flex justify-between items-center mb-2'>
+                            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                              {exercicio.titulo.split("_")[0]} {exercicio.titulo.split("_")[1].toLocaleUpperCase()}
+                            </h3>
+                            <div>
+                              {
+                                exercicio.status == null ? <X color='red' /> : <CheckCheck color='green' />
+                              }
+                            </div>
+                          </div>
+                          <p className="text-gray-600 text-sm mb-4">{exercicio.descricao}</p>
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-1">
+                              <CirclePlay className={categoriaColor[exercicio.secao].texto} size={20} />
+                              <span className="text-xs text-gray-500"> 1 {"1" == "1" ? "Variação" : "Variações"} </span>
+                            </div>
+                            <div>
+                              
+                              <ArrowRight className={`${categoriaColor[exercicio.secao].texto}`} size={15} />
+                            </div>
+                            <button className={`${categoriaColor[exercicio.secao].texto}} hover:text-blue-800 font-medium text-sm transition`}>
+                              Praticar 
+                            </button>
                           </div>
                         </div>
-                      </Link>
-                    )}
-                  </>
-                )) }
-              </div>
-              
+                      </div>
+                              
+                    </Link>
+                  )}
+                </>
+              ))}
+            </div>
+
           </div>
-          )) }
-        </div>
+        ))}
       </div>
+    </div>
   } />
 }
