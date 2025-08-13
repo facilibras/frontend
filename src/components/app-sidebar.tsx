@@ -61,8 +61,8 @@ export function AppSidebar() {
                                 return (
                                     <div className="flex justify-start items-center" key={exercicio.titulo}>
                                         <Book color="black" size={16} className="mr-2" />
-                                        <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: exercicio.titulo }}>
-                                            <p className="text-black">{exercicio.titulo.split('_')[0]} {exercicio.titulo.replace("_"," ").split(" ")[1].toUpperCase()} </p>
+                                        <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: exercicio.titulo }} reloadDocument>
+                                            <p className="text-black capitalize ">{exercicio.titulo.split('_')[0]} {exercicio.titulo.replace("_"," ").split(" ")[1].toUpperCase()} </p>
                                         </Link>
                                     </div>
                                 )
@@ -81,7 +81,7 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton className="text-white hover:text-white">
+                                <SidebarMenuButton className="bg-black hover:bg-zinc-400 text-white hover:text-white">
                                     <User2 color="white" />
                                     {user?.nome_usuario || 'Usuario'}
                                     <ChevronUp className="ml-auto" />

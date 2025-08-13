@@ -5,7 +5,7 @@ import { ProtectedRoute } from '../../components/ProtectedRoute'
 import { backendConnection } from '../../utils/axios'
 import { useEffect, useState } from 'react'
 import { exercicio, secao } from '../../const/exercicios.const'
-import { X, CheckCheck, Hand, CirclePlay, ArrowRight } from 'lucide-react'
+import { X, CheckCheck, Hand, CirclePlay, ArrowRight, Hourglass } from 'lucide-react'
 import { Separator } from '../../components/ui/separator'
 import { Checkbox } from '../../components/ui/checkbox'
 
@@ -17,8 +17,8 @@ export const Route = createFileRoute('/exercicios/')({
   )
 })
 
-const categoriaColor : any = {
-  "Alfabeto":{
+const categoriaColor: any = {
+  "Alfabeto": {
     texto: "text-blue-600",
     bg: "bg-blue-50",
     bgColor: "bg-blue-600"
@@ -119,27 +119,27 @@ function RouteComponent() {
                   {exercicio.secao == secao.nome && (
                     <Link to='/exercicios/$categoriaExercicio' params={{ categoriaExercicio: exercicio.titulo }} key={exercicio.titulo} className='w-full'>
 
-                      <div className="sign-card bg-white rounded-xl shadow-md overflow-hidden" data-category="basico">
+                      <div className="sign-card bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-1 transition" data-category="basico">
                         <div className={`h-48 ${categoriaColor[exercicio.secao].bg} flex items-center justify-center relative`}>
                           <div className="flex flex-col items-center justify-center h-full">
-                            
+
                             <Hand className={`${categoriaColor[exercicio.secao].texto}`} size={50} />
                             <p className={`font-medium ${categoriaColor[exercicio.secao].texto}`}> Praticar agora </p>
                           </div>
-                          <span 
+                          <span
                             className={`absolute top-3 left-3 ${categoriaColor[exercicio.secao].bgColor} text-white text-xs px-2 py-1 rounded`}
-                          > 
-                              Básico 
+                          >
+                            Básico
                           </span>
                         </div>
                         <div className="p-4">
                           <div className='flex justify-between items-center mb-2'>
-                            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                            <h3 className="text-xl font-semibold text-gray-800 mb-2 capitalize">
                               {exercicio.titulo.split("_")[0]} {exercicio.titulo.split("_")[1].toLocaleUpperCase()}
                             </h3>
                             <div>
                               {
-                                exercicio.status == null ? <X color='red' /> : <CheckCheck color='green' />
+                                exercicio.status == null ? <Hourglass color='orange' size={20} /> : <CheckCheck color='green' />
                               }
                             </div>
                           </div>
@@ -149,17 +149,17 @@ function RouteComponent() {
                               <CirclePlay className={categoriaColor[exercicio.secao].texto} size={20} />
                               <span className="text-xs text-gray-500"> 1 {"1" == "1" ? "Variação" : "Variações"} </span>
                             </div>
-                            <div>
-                              
+                            <div className='flex justify-center items-center gap-2'>
+                              <button className={`${categoriaColor[exercicio.secao].texto}} hover:text-blue-800 font-medium text-sm transition`}>
+                                Praticar
+                              </button>
                               <ArrowRight className={`${categoriaColor[exercicio.secao].texto}`} size={15} />
                             </div>
-                            <button className={`${categoriaColor[exercicio.secao].texto}} hover:text-blue-800 font-medium text-sm transition`}>
-                              Praticar 
-                            </button>
+
                           </div>
                         </div>
                       </div>
-                              
+
                     </Link>
                   )}
                 </>

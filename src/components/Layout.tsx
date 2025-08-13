@@ -19,7 +19,7 @@ function CustomTrigger() {
   const { toggleSidebar } = useSidebar()
 
   return <div className="flex items-center justify-between p-4 w-full bg-sidebar shadow-md">
-    <button onClick={toggleSidebar} className="bg-blue-500 rounded-full hover:bg-blue-600 transition-all duration-300">
+    <button onClick={toggleSidebar} className="bg-blue-500 rounded-full hover:bg-blue-600 transition-all duration-300 px-2 cursor-pointer">
       <AlignJustify color="white" />
     </button>
 

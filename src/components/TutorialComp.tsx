@@ -9,16 +9,17 @@ interface tutorialCompProps {
 }
 
 export default function TutorialComp({ exercicio, setSwitchToCamera }: tutorialCompProps) {
+  const title = exercicio.titulo.split("_").join(" ")
 
   return (
     <div className='mt-10 w-3/4 bg-neutral-200 rounded-3xl shadow-2xl p-5 flex flex-col gap-5'>
       
       <div className="flex items-center justify-center relative">
         <div className='text-center font-bold'>
-          <p className='text-2xl'> Exercicio: {exercicio.titulo}</p>
+          <p className='text-2xl capitalize'> exercicio: {title}</p>
         </div>
 
-        <div className="absolute right-5">
+        <div className="absolute right-5 cursor-pointer">
           <AlertCircleIcon />
         </div>
       </div>

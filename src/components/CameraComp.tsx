@@ -19,33 +19,37 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
   const [Mensagem, setMensagem] = useState(exercicio.titulo)
   const [video, setVideo] = useState<FormData | null>(null)
   const [isRecording, setIsRecording] = useState(false);
+  
+  const uploadVideo = async () => {
+
+    console.log
+    if (!video) return;
+
+    try {
+      const response = await backendConnection.useAxiosConnection({
+        method: 'POST',
+        path: '/exercicios',
+        dataValues: video,
+        subpath: `${exercicio.titulo}/reconhecer/`,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.sucesso) {
+        console.log(response.data);
+        toast.success(response.data.mensagem)
+      } else {
+        
+        toast.error("Sinal Não reconhecido")
+      }
+    } catch (error) {
+      console.error('Erro na requisição de upload:', error);
+    }
+  };
 
   useEffect(() => {
-    const uploadVideo = async () => {
-      if (!video) return;
-
-      try {
-        const response = await backendConnection.useAxiosConnection({
-          method: 'POST',
-          path: '/exercicios',
-          dataValues: video,
-          subpath: `${exercicio.titulo}/reconhecer/`,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-
-        if (response.status === 200) {
-          console.log(response.data);
-          toast.success(response.data.mensagem)
-        } else {
-          console.error('Erro no upload:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Erro na requisição de upload:', error);
-      }
-    };
-
+    console.log(video)
     uploadVideo(); 
   }, [video]);
 
@@ -53,6 +57,7 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
     setIsRecording(true);
 
     const videoElement = document.getElementById("video") as HTMLVideoElement;
+    
     if (!videoElement) {
       console.error("Video element not found!");
       return;
@@ -67,7 +72,8 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
       const contageminicial = setInterval(() => {
         setMensagem("Se prepare para Realizar o Movimento");
         setCountdown((prev) => {
-            if (prev <= 1) {
+            if (prev === 0) {
+              console.log({ prev })
               clearInterval(contageminicial);
 
               setMensagem("Muito bem!")
@@ -104,14 +110,15 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
         </div>
       </div>
 
-      { isRecording && 
+      {/* { isRecording &&  */}
         <div className='flex justify-center w-full relative'>
           <video className='lg:w-[680px] transform scale-x-[-1]' id='video'></video>
         </div>
-      }
+      {/* } */}
 
-      <div className='flex justify-between items-center w-full'>
+      <div className='flex justify-around items-center w-full'>
         <Button className='text-white' onClick={() => startCountdown(3)}> Iniciar Aula </Button>
+        <Button id='stopButton'> Stop </Button>
 
           <Button className='text-white flex gap-2'
             onClick={() => setSwitchToCamera(false)}>
