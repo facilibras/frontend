@@ -74,6 +74,8 @@ function RouteComponent() {
     }
   }
 
+  
+
   useEffect(() => {
     getExercicios()
   }, [])
@@ -99,75 +101,79 @@ function RouteComponent() {
 
       <div className='flex flex-col justify-center items-start gap-4 w-full'>
 
-        {secoes.map(secao => (
-          <div className='flex flex-col gap-2 w-full border' key={secao.nome}>
-            <p className='text-xl font-bold'> {secao.nome} </p>
+        {
+          secoes.map(secao => (
+            <div className='flex flex-col gap-2 w-full border' key={secao.nome}>
+              <p className='text-xl font-bold'> {secao.nome} </p>
 
-            <Separator className='w-full bg-neutral-500' />
+              <Separator className='w-full bg-neutral-500' />
 
-            <div className='flex gap-2 justify-between items-center cursor-pointer' onClick={() => handleChecked(secao.nome)}>
-              <p className='text-lg'>
-                Fácil
-              </p>
+              <div className='flex gap-2 justify-between items-center cursor-pointer' onClick={() => handleChecked(secao.nome)}>
+                <p className='text-lg'>
+                  Fácil
+                </p>
 
-              <Checkbox id={secao.nome} checked={checkeds.includes(secao.nome)} className='border border-black' />
+                <Checkbox id={secao.nome} checked={checkeds.includes(secao.nome)} className='border border-black' />
+              </div>
+
+              <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ${checkeds.includes(secao.nome) ? 'opacity-100 flex pointer-events-auto' : 'opacity-0 hidden pointer-events-none'} transition-all duration-500 ease`}>
+                {
+                  exercicios.map(exercicio => (
+                    <>
+                      {exercicio.secao == secao.nome && (
+                        <Link to='/exercicios/$categoriaExercicio' params={{ categoriaExercicio: exercicio.titulo }} key={exercicio.titulo} className='w-full'>
+
+                          <div className="sign-card bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-1 transition" data-category="basico">
+                            <div className={`h-48 ${categoriaColor[exercicio.secao].bg} flex items-center justify-center relative`}>
+                              <div className="flex flex-col items-center justify-center h-full">
+
+                                <Hand className={`${categoriaColor[exercicio.secao].texto}`} size={50} />
+                                <p className={`font-medium ${categoriaColor[exercicio.secao].texto}`}> Praticar agora </p>
+                              </div>
+                              <span
+                                className={`absolute top-3 left-3 ${categoriaColor[exercicio.secao].bgColor} text-white text-xs px-2 py-1 rounded`}
+                              >
+                                Básico
+                              </span>
+                            </div>
+                            <div className="p-4">
+                              <div className='flex justify-between items-center mb-2'>
+                                <h3 className="text-xl font-semibold text-gray-800 mb-2 capitalize">
+                                  {exercicio.titulo.split("_")[0]} {exercicio.titulo.split("_")[1].toLocaleUpperCase()}
+                                </h3>
+                                <div>
+                                  {
+                                    exercicio.status == null ? <Hourglass color='orange' size={20} /> : <CheckCheck color='green' />
+                                  }
+                                </div>
+                              </div>
+                              <p className="text-gray-600 text-sm mb-4">{exercicio.descricao}</p>
+                              <div className="flex justify-between items-center">
+                                <div className="flex items-center gap-1">
+                                  <CirclePlay className={categoriaColor[exercicio.secao].texto} size={20} />
+                                  <span className="text-xs text-gray-500"> 1 {"1" == "1" ? "Variação" : "Variações"} </span>
+                                </div>
+                                <div className='flex justify-center items-center gap-2'>
+                                  <button className={`${categoriaColor[exercicio.secao].texto}} hover:text-blue-800 font-medium text-sm transition`}>
+                                    Praticar
+                                  </button>
+                                  <ArrowRight className={`${categoriaColor[exercicio.secao].texto}`} size={15} />
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+
+                        </Link>
+                      )}
+                    </>
+                  ))
+                }
+              </div>
+
             </div>
-
-            <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ${checkeds.includes(secao.nome) ? 'opacity-100 flex pointer-events-auto' : 'opacity-0 hidden pointer-events-none'} transition-all duration-500 ease`}>
-              {exercicios.map(exercicio => (
-                <>
-                  {exercicio.secao == secao.nome && (
-                    <Link to='/exercicios/$categoriaExercicio' params={{ categoriaExercicio: exercicio.titulo }} key={exercicio.titulo} className='w-full'>
-
-                      <div className="sign-card bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-1 transition" data-category="basico">
-                        <div className={`h-48 ${categoriaColor[exercicio.secao].bg} flex items-center justify-center relative`}>
-                          <div className="flex flex-col items-center justify-center h-full">
-
-                            <Hand className={`${categoriaColor[exercicio.secao].texto}`} size={50} />
-                            <p className={`font-medium ${categoriaColor[exercicio.secao].texto}`}> Praticar agora </p>
-                          </div>
-                          <span
-                            className={`absolute top-3 left-3 ${categoriaColor[exercicio.secao].bgColor} text-white text-xs px-2 py-1 rounded`}
-                          >
-                            Básico
-                          </span>
-                        </div>
-                        <div className="p-4">
-                          <div className='flex justify-between items-center mb-2'>
-                            <h3 className="text-xl font-semibold text-gray-800 mb-2 capitalize">
-                              {exercicio.titulo.split("_")[0]} {exercicio.titulo.split("_")[1].toLocaleUpperCase()}
-                            </h3>
-                            <div>
-                              {
-                                exercicio.status == null ? <Hourglass color='orange' size={20} /> : <CheckCheck color='green' />
-                              }
-                            </div>
-                          </div>
-                          <p className="text-gray-600 text-sm mb-4">{exercicio.descricao}</p>
-                          <div className="flex justify-between items-center">
-                            <div className="flex items-center gap-1">
-                              <CirclePlay className={categoriaColor[exercicio.secao].texto} size={20} />
-                              <span className="text-xs text-gray-500"> 1 {"1" == "1" ? "Variação" : "Variações"} </span>
-                            </div>
-                            <div className='flex justify-center items-center gap-2'>
-                              <button className={`${categoriaColor[exercicio.secao].texto}} hover:text-blue-800 font-medium text-sm transition`}>
-                                Praticar
-                              </button>
-                              <ArrowRight className={`${categoriaColor[exercicio.secao].texto}`} size={15} />
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-
-                    </Link>
-                  )}
-                </>
-              ))}
-            </div>
-
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   } />
