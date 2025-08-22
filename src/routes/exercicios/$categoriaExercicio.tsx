@@ -7,7 +7,8 @@ import Layout from '../../components/Layout';
 import { useState, useEffect } from 'react';
 import { exercicio } from '../../const/exercicios.const';
 import { ProtectedRoute } from '../../components/ProtectedRoute';
-import { ArrowBigRight, ChevronRight } from 'lucide-react';
+import { AlignJustify, ArrowBigRight, X, ChevronRight, RotateCwIcon, Star, Loader } from 'lucide-react';
+import { Button } from '../../components/ui/button';
 
 export const Route = createFileRoute('/exercicios/$categoriaExercicio')({
     component: () =>
@@ -15,11 +16,19 @@ export const Route = createFileRoute('/exercicios/$categoriaExercicio')({
             <RouteComponent />
         </ProtectedRoute>,
 })
-
+interface instrucoesProsp {
+    instrucoes: string[]
+    linkvideo: string
+}
 
 function RouteComponent() {
 
     const { categoriaExercicio } = Route.useParams()
+
+    const [variacaoes, setVariacoes] = useState<instrucoesProsp>({
+        instrucoes: [],
+        linkvideo: ''
+    })
 
     const [exercicio, setExercicio] = useState<exercicio>({
         descricao: '',
@@ -35,13 +44,18 @@ function RouteComponent() {
 
     async function getExercicios() {
 
-        const getexercicios = await backendConnection.useAxiosConnection({
+        const getexercicios:exercicio = await backendConnection.useAxiosConnection({
             method: 'GET',
             path: `/exercicios/${categoriaExercicio}`,
         })
 
         if (getexercicios) {
             setExercicio(getexercicios)
+            setVariacoes({ instrucoes:['Afaste o corpo',
+                        'Mantenha as mãos visível na camêra',
+                        'TODO'
+                        ], 
+                        linkvideo: getexercicios.palavras[0].video})
         }
     }
 
@@ -68,11 +82,10 @@ function RouteComponent() {
 
                         <div className="flex items-center gap-4">
                             <div className="flex items-center bg-blue-50 px-3 py-2 rounded-lg">
-                                <i className="fas fa-star text-yellow-500 mr-2"></i>
+                                <Star fill='#fcc800'  className="mr-2"/>
                                 <span className="font-medium">Dificuldade: <span className="text-blue-600">Fácil</span></span>
                             </div>
                             <div className="flex items-center bg-green-50 px-3 py-2 rounded-lg">
-                                <i className="fas fa-check-circle text-green-500 mr-2"></i>
                                 <span className="font-medium">Completado: <span className="text-green-600">3 vezes</span></span>
                             </div>
                         </div>
@@ -86,24 +99,28 @@ function RouteComponent() {
                             <i className="fas fa-video text-blue-500"></i> Variações do Sinal
                         </h3>
                         <div className="flex gap-2">
-                            <button
-                                className="tab-button variation-tab-btn active px-3 py-1 rounded-md text-sm flex items-center gap-1"
+                            <Button
+                                className="bg-blue-500  active px-3 py-1 rounded-md text-sm flex items-center gap-1"
                                 data-tab="variation1">
                                 <i className="fas fa-circle-check text-green-500"></i> Variação 1
-                            </button>
-                            <button className="tab-button variation-tab-btn px-3 py-1 rounded-md text-sm flex items-center gap-1"
+                            </Button>
+                            <Button 
+                                disabled={true}
+                                className="tab-button variation-tab-btn px-3 py-1 rounded-md text-sm flex items-center gap-1"
                                 data-tab="variation2">
-                                <i className="fas fa-circle-xmark text-gray-400"></i> Variação 2
-                            </button>
-                            <button className="tab-button variation-tab-btn px-3 py-1 rounded-md text-sm flex items-center gap-1"
+                                <X className="fas fa-circle-xmark text-gray-400"/> Variação 2
+                            </Button>
+                            <Button 
+                                disabled={true}
+                                className="tab-button variation-tab-btn px-3 py-1 rounded-md text-sm flex items-center gap-1"
                                 data-tab="variation3">
-                                <i className="fas fa-circle-xmark text-gray-400"></i> Variação 3
-                            </button>
+                                 <X className="fas fa-circle-xmark text-gray-400"/> Variação 3
+                            </Button>
                         </div>
                     </div>
 
                     {/* <!-- Variação 1 --> */}
-                    <Variation instrucoes={exercicio.palavras[0].palavra.split(",")} linkvideo={exercicio.palavras[0].video} />
+                    <Variation instrucoes={variacaoes.instrucoes} linkvideo={variacaoes.linkvideo} />
 
 
                 </section>
@@ -143,44 +160,10 @@ function RouteComponent() {
                                             <p className="text-sm text-gray-500">Nosso sistema irá analisar seu sinal e dar feedback
                                                 se você o executou corretamente</p>
                                         </div>
-
-                                        {/* <!-- Feedback (começa escondido) --> */}
-                                        <div id="feedbackCard"
-                                            className="feedback-card hidden bg-white border rounded-lg p-4 shadow-sm mb-4">
-                                            <div className="flex items-start">
-                                                <div id="feedbackIcon" className="flex-shrink-0 mt-1"></div>
-                                                <div className="ml-3">
-                                                    <h4 id="feedbackTitle" className="font-medium text-gray-800"></h4>
-                                                    <p id="feedbackText" className="text-sm text-gray-600 mt-1"></p>
-                                                </div>
-                                            </div>
-                                            <div className="mt-4 pt-4 border-t">
-                                                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                    <div id="feedbackProgresso" className="h-full bg-green-500 rounded-full"
-                                                        style={{ width: "50%" }}></div>
-                                                </div>
-                                                <div className="flex justify-between text-xs text-gray-600 mt-1 mb-3">
-                                                    <span>0%</span>
-                                                    <span id="feedbackPrecisao"></span>
-                                                    <span>100%</span>
-                                                </div>
-                                                <ul className="text-sm text-gray-700 space-y-1">
-                                                    <li id="feedbackMao" className="flex items-center"></li>
-                                                    <li id="feedbackMovimento" className="flex items-center"></li>
-                                                    <li id="feedbackRosto" className="flex items-center"></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
+                                        
                                         {/* <!-- Barra de Progresso --> */}
-                                        <div id="progressContainer" className="hidden">
-                                            <div className="flex justify-between items-center mb-1">
-                                                <span className="text-sm font-medium text-gray-700">Analisando seu sinal...</span>
-                                                <span id="progressPercent" className="text-xs font-medium text-blue-600">0%</span>
-                                            </div>
-                                            <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                                <div id="progressBar" className="progress-bar bg-blue-600 h-2.5 rounded-full w-0"></div>
-                                            </div>
+                                        <div id="progressContainer" className="">
+                                            <Loader/>
                                         </div>
 
                                         {/* <!-- Dicas --> */}
@@ -224,15 +207,16 @@ function RouteComponent() {
                                         <div className="flex items-center gap-3 mb-3">
                                             <div
                                                 className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 group-hover:bg-green-200 transition">
-                                                <i className="fas fa-list"></i>
+                                                <AlignJustify/>
                                             </div>
                                             <h4 className="font-medium">Mais exercícios</h4>
                                         </div>
                                         <p className="text-sm text-gray-600 mb-2">Explore outros sinais para praticar</p>
                                         <div className="flex items-center text-green-600 text-sm font-medium">
                                             <span>Ver todos</span>
-                                            <i
-                                                className="fas fa-chevron-right ml-1 transition-transform group-hover:translate-x-1"></i>
+                                             <ChevronRight 
+                                                className='ml-1 transition-transform group-hover:translate-x-1'
+                                            />
                                         </div>
                                     </div>
                                 </Link>
@@ -244,15 +228,16 @@ function RouteComponent() {
                                         <div className="flex items-center gap-3 mb-3">
                                             <div
                                                 className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition">
-                                                <i className="fas fa-redo"></i>
+                                                <RotateCwIcon/>
                                             </div>
                                             <h4 className="font-medium">Revisar</h4>
                                         </div>
                                         <p className="text-sm text-gray-600 mb-2">Assista novamente ao vídeo tutorial</p>
                                         <div className="flex items-center text-purple-600 text-sm font-medium">
                                             <span>Repetir</span>
-                                            <i
-                                                className="fas fa-chevron-right ml-1 transition-transform group-hover:translate-x-1"></i>
+                                            <ChevronRight 
+                                                className='ml-1 transition-transform group-hover:translate-x-1'
+                                            />
                                         </div>
                                     </div>
                                 </a>

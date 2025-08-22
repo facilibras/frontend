@@ -53,6 +53,10 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
     uploadVideo();
   }, [video]);
 
+  useEffect(() => {
+    camera.listDevices('select-camera')
+  }, [])
+
   const startCountdown = async (tempoGravacao: number) => {
     setIsRecording(true);
 
@@ -99,13 +103,11 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
 
   return (
     <div className='flex flex-col justify-center items-center gap-4 w-full shadow-xl p-2 rounded-sm'>
-
       {
         countdown > 0 && (
           <p className="text-3xl text-center font-bold">{countdown}</p>
         )
       }
-
       <div className='h-12 w-full flex justify-center items-center gap-3 p-1 border-2 bg-white border-black rounded'>
         <div className='flex justify-center items-centerw-2/3'>
           <p className='font-bold h-full'>{Mensagem}</p>
@@ -120,11 +122,19 @@ export default function CameraComponent({ exercicio, camera, setSwitchToCamera }
 
       <div className='flex justify-around items-center w-full'>
         <Button 
-          className='px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition flex items-center' 
-          onClick={() => startCountdown(3)}> Gravar </Button>
+          className='px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition flex items-center cursor-pointer' 
+          onClick={() => startCountdown(3)}> Gravar 
+        </Button>
         <Button 
           id='stopButton' 
-          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition flex items-center transparente"> Stop </Button>
+          className="px-4 py-2 shadow-2xl bg-red-500 text-white rounded-lg hover:bg-red-600 transition flex items-center transparente"> Stop 
+        </Button>
+        <select 
+          id="select-camera"
+          className="border-1 border-black rounded-sm p-1"
+          onChange={(e)=> camera.setDeviceSelection(e.target.value)}>
+            Selecione a Camera
+        </select>
       </div>
     </div>
   )

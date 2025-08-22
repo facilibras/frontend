@@ -31,9 +31,9 @@ function RouteComponent() {
             <div className=' flex flex-wrap lg:flex-nowrap mb-5'>
                 <div className='bg-blue-600 rounded-3xl w-full lg:w-1/2 h-auto m-2 p-4'> {/* Informações do usuario */}
                     <div className='flex'> {/* Imagem e nome do usuario */}
-                        <img className='rounded-full ' src="21.png" alt="" />
+                        <img className='rounded-full w-1/3 lg:w-2/5' src="21.png" alt="" />
                         <div className='ml-2'>
-                            <p className='font-bold text-3xl text-white'> Bem Vindo {UserName}</p>
+                            <p className='font-bold text-2xl lg:text-3xl text-white'> Bem Vindo {UserName}</p>
                             <p className='text-white text-2xl'> Nível : {Nivel}</p>
                         </div>
                     </div>

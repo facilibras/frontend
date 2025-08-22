@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import { Book, User2, ChevronUp } from "lucide-react"
+import { Book, User2, ChevronRight } from "lucide-react"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
 import {
     Sidebar,
@@ -11,8 +11,6 @@ import {
     SidebarMenu,
     SidebarMenuItem,
     SidebarMenuButton,
-
-
 } from "./ui/sidebar"
 import { useUserStore } from '../store/user'
 import { useEffect, useState } from "react"
@@ -84,13 +82,19 @@ export function AppSidebar() {
                                 <SidebarMenuButton className="bg-black hover:bg-zinc-400 text-white hover:text-white">
                                     <User2 color="white" />
                                     {user?.nome_usuario || 'Usuario'}
-                                    <ChevronUp className="ml-auto" />
+                                    <ChevronRight className="ml-auto" />
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
-                                side="top"
+                                side="left"
                                 className="w-[--radix-popper-anchor-width]"
                             >
+                                <DropdownMenuItem>
+                                    <span> Perfil </span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <span> Configurações </span>
+                                </DropdownMenuItem>
                                 <DropdownMenuItem onClick={Deslogar}>
                                     <span> Sair </span>
                                 </DropdownMenuItem>

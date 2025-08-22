@@ -11,7 +11,7 @@ export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ childr
   if (!isAuth.status) {
     navigate({ to: '/login' })
     toast.warning(<span className='flex flex-col'>
-      <p>Você precisa estar logado para acessar essa página!</p>
+      <p> Você precisa estar logado para acessar essa página! </p>
       <br />
       <span className='text-sm'>{isAuth.message}</span>
     </span>,{
