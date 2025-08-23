@@ -8,6 +8,7 @@ import { exercicio, secao } from '../../const/exercicios.const'
 import { CheckCheck, Hand, CirclePlay, ArrowRight, Hourglass } from 'lucide-react'
 import { Separator } from '../../components/ui/separator'
 import { Checkbox } from '../../components/ui/checkbox'
+import { Input } from '../../components/ui/input'
 import { Button } from '../../components/ui/button'
 
 export const Route = createFileRoute('/exercicios/')({
@@ -38,6 +39,7 @@ const categoriaColor: any = {
 
 function RouteComponent() {
 
+  const [fetchExercicios, setFetchExercicios] = useState([])
   const [exercicios, setExercicios] = useState<exercicio[]>([])
   const [secoes, setSecoes] = useState<secao[]>([])
   const [checkeds, setChecked] = useState<Array<string>>([]);
@@ -68,6 +70,7 @@ function RouteComponent() {
     if (getexercicios) {
 
       setExercicios(getexercicios)
+      setFetchExercicios(getexercicios)
     }
 
     const getSecoes = await backendConnection.useAxiosConnection({
@@ -92,30 +95,53 @@ function RouteComponent() {
     <div className="flex w-full items-center flex-col gap-4 mt-4 p-5">
       <p className='font-bold text-3xl text-left w-full'> Exercícios </p>
 
-      <div className='flex gap-2 justify-start items-center w-full'>
-        {
-          secoes.map((secao, index) => (
-            <Button
+      <div className='flex gap-2 justify-between items-center w-full'>
+        <div className='flex gap-2 items-center'>
+          {
+            secoes.map((secao, index) => (
+              <Button
 
-              key={index}
-              onClick={() =>
-                setSecaoSelecionada(
-                  secaoSelecionada === secao.nome ? null : secao.nome
-                )
-              }
-              className={`flex gap-3 items-center rounded-md border py-1 px-3 text-sm shadow-sm transition-all
+                key={index}
+                onClick={() =>
+                  setSecaoSelecionada(
+                    secaoSelecionada === secao.nome ? null : secao.nome
+                  )
+                }
+                className={`flex gap-3 items-center rounded-md border py-1 px-3 text-sm shadow-sm transition-all
                 ${secaoSelecionada === secao.nome
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "border-slate-300 text-slate-600 hover:bg-slate-100 bg-white"
-                }`}
-            >
-              {secao.nome}
-              <span className="rounded-full bg-gray-300 px-2 text-xs">
-                {secao.qtd_ex}
-              </span>
-            </Button>
-          ))
-        }
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "border-slate-300 text-slate-600 hover:bg-slate-100 bg-white"
+                  }`}
+              >
+                {secao.nome}
+                <span className="rounded-full bg-gray-300 px-2 text-xs">
+                  {secao.qtd_ex}
+                </span>
+              </Button>
+            ))
+          }
+        </div>
+
+
+        <div>
+          <Input
+            type="text"
+            placeholder="Pesquisar exercício..."
+            className="w-64 border-2 border-black"
+            onChange={(e) => {
+              const searchTerm = e.target.value.toLowerCase();
+              if (searchTerm === "") {
+                setExercicios(fetchExercicios);
+                return;
+              }
+              setExercicios((prev) =>
+                prev.filter((ex) =>
+                  ex.titulo.toLowerCase().includes(searchTerm)
+                )
+              );
+            }}
+          />
+        </div>
       </div>
 
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full'>
@@ -139,7 +165,7 @@ function RouteComponent() {
                         }`}
                       size={50}
                     />
-                    <p className={`font-medium ${categoriaColor[exercicio.secao]?.texto ||"text-gray-700"}`}
+                    <p className={`font-medium ${categoriaColor[exercicio.secao]?.texto || "text-gray-700"}`}
                     >
                       Praticar agora
                     </p>
@@ -189,8 +215,8 @@ function RouteComponent() {
                       >
                         Praticar
                       </button>
-                      <ArrowRight 
-                        className={`${categoriaColor[exercicio.secao]?.texto ||"text-gray-700"} transition-transform group-hover:translate-x-1`}
+                      <ArrowRight
+                        className={`${categoriaColor[exercicio.secao]?.texto || "text-gray-700"} transition-transform group-hover:translate-x-1`}
                         size={15}
                       />
                     </div>

@@ -76,7 +76,11 @@ function RouteComponent() {
                                 <Link to='/exercicios' className='text-blue-600 hover:text-blue-800 transition flex items-center'> Voltar para exercícios </Link>
                                 <span className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full">Básico</span>
                             </div>
-                            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Exercício: Sinal {exercicio.palavras[0].palavra.replace('_', ' ')}</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Exercício: Sinal 
+                            {" "}
+                            {exercicio.titulo.split('_')[0].toUpperCase()}
+                            {" "}    
+                            {exercicio.titulo.split("_")[1]}</h2>
                             <p className="text-lg text-gray-600">Aprenda e pratique o sinal de saudação básica em Libras.</p>
                         </div>
 
@@ -98,7 +102,7 @@ function RouteComponent() {
                         <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
                             <i className="fas fa-video text-blue-500"></i> Variações do Sinal
                         </h3>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                             <Button
                                 className="bg-blue-500  active px-3 py-1 rounded-md text-sm flex items-center gap-1"
                                 data-tab="variation1">
