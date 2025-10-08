@@ -25,8 +25,8 @@ Facilibras é uma aplicação web para ensino e prática de Libras (Língua Bras
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/facilibras.git
-   cd facilitbras/frontend
+   git clone https://github.com/facilibras/frontend.git
+   cd frontend
    ```
 
 2. Instale as dependências:
