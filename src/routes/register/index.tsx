@@ -13,7 +13,7 @@ export const Route = createFileRoute('/register/')({
 
 function RouteComponent() {
   const navigate = useNavigate({ from: '/register' })
-  const [button, setButton] = useState(true)
+  const [button, setButton] = useState(false)
   const [verificadorSenha, setVerificadoSenha] = useState({
     isEqual: false,
     haveNumber: false,
@@ -24,13 +24,16 @@ function RouteComponent() {
     nome: '',
     email: '',
     senha: '',
-    senhaVerficador: ''
+    senhaVerficador: '',
+    readyToSend: false
   })
   useEffect(() => {
     const isEqual = CadastroValues.senha === CadastroValues.senhaVerficador
     setVerificadoSenha({ ...verificadorSenha, isEqual: isEqual })
-    if (CadastroValues.nome != '' && CadastroValues.email != '' && CadastroValues.senha != '' && verificadorSenha.isEqual) {
-      setButton(false)
+    
+    if (CadastroValues.nome && CadastroValues.email && CadastroValues.senha && CadastroValues.readyToSend) {
+      console.log('entrou')
+      setButton(true)
     }
   }, [CadastroValues])
 
@@ -39,9 +42,13 @@ function RouteComponent() {
     setCadastroValues({ ...CadastroValues, senha: senha })
 
     const hasUpperLowerNum = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).+$/.test(senha)
-    
     const hasSpecial = /^(?=.*[!@#$%^&*(),.?":{}|<>]).+$/.test(senha)
     const has8caracter = senha.length >= 8
+
+    if (verificadorSenha.isEqual && hasUpperLowerNum && hasSpecial && has8caracter) {
+      setCadastroValues({ ...CadastroValues, readyToSend: true, senha: senha })
+    }
+
     setVerificadoSenha( 
       {
         ...verificadorSenha,
@@ -158,7 +165,7 @@ return <div className='p-6 flex w-full justify-center items-center h-screen bg-g
       <Button
         type='submit'
         className='bg-blue-500 hover:bg-blue-700 w-full'
-        disabled={button}
+        disabled={!button}
       >
         Registrar
       </Button>

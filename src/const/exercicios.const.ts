@@ -3,7 +3,7 @@ export interface exercicio {
     secao: string,
     descricao: string,
     palavras: palavra[]
-    prox_tarefa: string,
+    prox_tarefa: string | null,
     status: null
 }
 

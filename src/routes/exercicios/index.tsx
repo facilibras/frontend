@@ -6,8 +6,6 @@ import { backendConnection } from '../../utils/axios'
 import { useEffect, useState } from 'react'
 import { exercicio, secao } from '../../const/exercicios.const'
 import { CheckCheck, Hand, CirclePlay, ArrowRight, Hourglass } from 'lucide-react'
-import { Separator } from '../../components/ui/separator'
-import { Checkbox } from '../../components/ui/checkbox'
 import { Input } from '../../components/ui/input'
 import { Button } from '../../components/ui/button'
 
@@ -18,14 +16,22 @@ export const Route = createFileRoute('/exercicios/')({
     </ProtectedRoute>
   )
 })
+interface Propriedades {
+  texto: string,
+  bg: string,
+  bgColor: string
+}
+interface CategoriaCores {
+  [key: string]: Propriedades
+}
 
-const categoriaColor: any = {
+const categoriaColor: CategoriaCores = {
   "Alfabeto": {
     texto: "text-blue-600",
     bg: "bg-blue-50",
     bgColor: "bg-blue-600"
   },
-  "Números": { //["bg-green-50", "text-green-600", "bg-green-600"],
+  "Números": { 
     texto: "text-green-600",
     bg: "bg-green-50",
     bgColor: "bg-green-600"
@@ -42,18 +48,7 @@ function RouteComponent() {
   const [fetchExercicios, setFetchExercicios] = useState([])
   const [exercicios, setExercicios] = useState<exercicio[]>([])
   const [secoes, setSecoes] = useState<secao[]>([])
-  const [checkeds, setChecked] = useState<Array<string>>([]);
   const [secaoSelecionada, setSecaoSelecionada] = useState<string | null>(null);
-
-  const handleChecked = (value: string) => {
-    if (checkeds.includes(value)) {
-      setChecked(checkeds.filter((item) => item !== value));
-
-      return;
-    }
-
-    setChecked([...checkeds, value]);
-  }
 
   const exerciciosFiltrados = secaoSelecionada
     ? exercicios.filter((e) => e.secao === secaoSelecionada)
@@ -65,10 +60,8 @@ function RouteComponent() {
       method: 'GET',
       path: '/exercicios',
     })
-    console.log(getexercicios)
 
     if (getexercicios) {
-
       setExercicios(getexercicios)
       setFetchExercicios(getexercicios)
     }
@@ -83,46 +76,45 @@ function RouteComponent() {
     }
   }
 
-
-
   useEffect(() => {
     getExercicios()
   }, [])
-
 
 
   return <Layout>
     <div className="flex w-full items-center flex-col gap-4 mt-4 p-5">
       <p className='font-bold text-3xl text-left w-full'> Exercícios </p>
 
-      <div className='flex gap-2 justify-between items-center w-full'>
+      <div className='flex gap-2 justify-between flex-wrap items-center w-full'>
         <div className='flex gap-2 items-center'>
           {
             secoes.map((secao, index) => (
               <Button
-
                 key={index}
                 onClick={() =>
                   setSecaoSelecionada(
                     secaoSelecionada === secao.nome ? null : secao.nome
                   )
                 }
-                className={`flex gap-3 items-center rounded-md border py-1 px-3 text-sm shadow-sm transition-all
+                className={`rounded-md border text-sm shadow-sm transition-all border-none
                 ${secaoSelecionada === secao.nome
-                    ? "bg-blue-600 text-white border-blue-600"
+                    ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-800"
                     : "border-slate-300 text-slate-600 hover:bg-slate-100 bg-white"
                   }`}
               >
                 {secao.nome}
-                <span className="rounded-full bg-gray-300 px-2 text-xs">
+                <span className={`p-2 w-full text-md
+                    ${secaoSelecionada === secao.nome
+                      ? " text-white"
+                      : " text-gray-700"
+                    }
+                  `}>
                   {secao.qtd_ex}
                 </span>
               </Button>
             ))
           }
         </div>
-
-
         <div>
           <Input
             type="text"
@@ -139,6 +131,7 @@ function RouteComponent() {
                   ex.titulo.toLowerCase().includes(searchTerm)
                 )
               );
+              console.log(exercicios)
             }}
           />
         </div>

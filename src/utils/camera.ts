@@ -19,6 +19,7 @@ export class Camera {
     }
 
     public setDeviceSelection(deviceId: string) {
+        console.log("Câmera selecionada: ", deviceId);
         this.deviceSelection = deviceId;
     }
 
