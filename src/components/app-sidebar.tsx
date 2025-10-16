@@ -21,8 +21,8 @@ import { useNavigate } from "@tanstack/react-router"
 export function AppSidebar() {
 
     const { states: { user } } = useUserStore();
-
     const navigate = useNavigate()
+    const UserName = `${user?.nome_usuario.split(" ")[0]} ${user?.nome_usuario.split(" ")[2][0].toUpperCase()}.` || 'Convidado'
     const [exercicios, setExercicios] = useState<exercicio[]>([])
 
     async function getExercicios() {
@@ -60,7 +60,7 @@ export function AppSidebar() {
                                     <div className="flex justify-start items-center" key={exercicio.titulo}>
                                         <Book color="black" size={16} className="mr-2" />
                                         <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: exercicio.titulo }} reloadDocument>
-                                            <p className="text-black capitalize ">{exercicio.titulo.split('_')[0]} {exercicio.titulo.replace("_"," ").split(" ")[1].toUpperCase()} </p>
+                                            <p className="text-black capitalize ">{exercicio.titulo.split('_')[0]} {exercicio.titulo.replace("_"," ").split(" ")[1]} </p>
                                         </Link>
                                     </div>
                                 )
@@ -74,35 +74,6 @@ export function AppSidebar() {
                     </SidebarGroupLabel>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton className="bg-black hover:bg-zinc-400 text-white hover:text-white">
-                                    <User2 color="white" />
-                                    {user?.nome_usuario || 'Usuario'}
-                                    <ChevronRight className="ml-auto" />
-                                </SidebarMenuButton>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                side="left"
-                                className="w-[--radix-popper-anchor-width]"
-                            >
-                                <DropdownMenuItem>
-                                    <span> Perfil </span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <span> Configurações </span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={Deslogar}>
-                                    <span> Sair </span>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarFooter>
         </Sidebar>
     )
 }

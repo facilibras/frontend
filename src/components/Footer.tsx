@@ -1,3 +1,5 @@
+import { Github } from "lucide-react";
+
 export default function Footer(){
 
 
@@ -22,7 +24,7 @@ export default function Footer(){
                                 </a>
                                 <a href="#"
                                     className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-300 hover:text-white hover:bg-black transition">
-                                    <i className="fab fa-github"></i>
+                                    <Github size={20} />
                                 </a>
                             </div>
                         </div>
@@ -52,7 +54,7 @@ export default function Footer(){
                             <ul className="space-y-3">
                                 <li className="flex items-start gap-3">
                                     <i className="fas fa-envelope mt-1 text-blue-400"></i>
-                                    <span className="text-gray-400">contato@facilibras.com.br</span>
+                                    <span className="text-gray-400"></span>
                                 </li>
                             </ul>
                         </div>

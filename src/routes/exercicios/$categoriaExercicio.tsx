@@ -6,7 +6,7 @@ import Layout from '../../components/Layout';
 import { useState, useEffect } from 'react';
 import { exercicio } from '../../const/exercicios.const';
 import { ProtectedRoute } from '../../components/ProtectedRoute';
-import { AlignJustify, ArrowBigRight, X, ChevronRight, RotateCwIcon, Star, Loader } from 'lucide-react';
+import { AlignJustify, ArrowBigRight, ChevronRight, RotateCwIcon, Loader, Camera, Video } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 
 export const Route = createFileRoute('/exercicios/$categoriaExercicio')({
@@ -16,77 +16,96 @@ export const Route = createFileRoute('/exercicios/$categoriaExercicio')({
         </ProtectedRoute>,
 })
 interface instrucoesProsp {
-    instrucoes: string[]
-    linkvideo: string
+    instrucoes: string,
+    linkvideo: string,
+    titulo: string
 }
 
 function RouteComponent() {
 
     const { categoriaExercicio } = Route.useParams()
-    const [variacaoes, setVariacoes] = useState<instrucoesProsp>({
-        instrucoes: [],
-        linkvideo: ''
+    const [variacao, setVariacao] = useState<instrucoesProsp>({
+        instrucoes: '',
+        linkvideo: '',
+        titulo: ''
     })
     const [realizandoExercicio, setRealizandoExercicio] = useState(false)
-    const [respostaRecinhecido,setRespostaReconhecimento] = useState<string>('')
+    const [respostaRecinhecido, setRespostaReconhecimento] = useState<string>('')
+    const [listaVariacoes, setListaVariacoes] = useState<exercicio[]>([])
     const [exercicio, setExercicio] = useState<exercicio>({
         descricao: '',
         palavras: [
             { palavra: '', video: '' }
         ],
-        prox_tarefa: null,
+        proxTarefa: null,
         secao: '',
         status: null,
-        titulo: ''
+        titulo: '',
+        ehVariacao: false,
+        variacao: '',
 
     })
 
-    async function getExercicios() {
 
-        const getexercicios: exercicio = await backendConnection.useAxiosConnection({
+    async function getExercicio() {
+
+        const getexercicio: exercicio = await backendConnection.useAxiosConnection({
             method: 'GET',
             path: `/exercicios/${categoriaExercicio}`,
         })
 
-        if (getexercicios) {
-            setExercicio(getexercicios)
-            setVariacoes({
-                instrucoes: ['TODO de Intruções para o Movimento',
-                    'TODO de Intruções para o Movimento',
-                    'TODO de Intruções para o Movimento'
-                ],
-                linkvideo: getexercicios.palavras[0].video
+        if (getexercicio) {
+
+            setExercicio(getexercicio)
+            setVariacao({
+                instrucoes: getexercicio.descricao,
+                linkvideo: getexercicio.palavras[0].video,
+                titulo: getexercicio.titulo
             })
+            let possuiVariacão = true
+            let nextpath = getexercicio.variacao
+            setListaVariacoes(prev => [...prev, getexercicio])
+
+            while (possuiVariacão) {
+
+                const variacaoExercicio = await backendConnection.useAxiosConnection({
+                    method: 'GET',
+                    path: `/exercicios/${nextpath}`,
+                })
+
+                if (variacaoExercicio) {
+                    setListaVariacoes(prev => [...prev, variacaoExercicio])
+                    nextpath = variacaoExercicio.variacao
+                    if (variacaoExercicio.variacao == null) {
+                        possuiVariacão = false
+                    }
+                }
+            }
         }
-
-        console.log(getexercicios)
-
     }
 
     useEffect(() => {
-        getExercicios()
-        console.log(exercicio)
+        getExercicio()
     }, [])
-
-    
 
     return <Layout>
         <div className='w-full flex justify-center items-center flex-col'>
             <main className="container mx-auto px-4 py-8">
-                
+
                 <section className="mb-8">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                         <div>
                             <div className="flex items-center gap-2 mb-2">
                                 <Link to='/exercicios' className='text-blue-600 hover:text-blue-800 transition flex items-center'> Voltar para exercícios </Link>
-                                <span className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full">Básico</span>
+                                <span className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full"> Básico </span>
                             </div>
                             <h2 className="text-3xl md:text-4xl font-bold capitalize text-gray-800 mb-2">Exercício:
                                 {" "}
                                 {exercicio.titulo.split('_')[0]}
                                 {" "}
-                                {exercicio.titulo.split("_")[1]}</h2>
-                            <p className="text-lg text-gray-600">Aprenda e pratique o sinal de saudação básica em Libras.</p>
+                                {exercicio.titulo.split("_")[1]}
+                            </h2>
+                            <p className="text-lg text-gray-600"> Aprenda e pratique o sinal de saudação básica em Libras.</p>
                         </div>
 
                         {/* <div className="flex items-center gap-4">
@@ -101,35 +120,40 @@ function RouteComponent() {
                     </div>
                 </section>
 
-                
+
                 <section className="mb-12 bg-white rounded-xl shadow-md overflow-hidden">
                     <div className="p-4 border-b flex justify-between items-center flex-col md:flex-row gap-4">
                         <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                            <i className="fas fa-video text-blue-500"></i> Variações do Sinal
+                            <Video /> Variações do Sinal
                         </h3>
                         <div className="flex flex-wrap justify-center gap-2 w-full md:w-auto">
-                            <Button
-                                className="bg-blue-500 active px-3 py-1 rounded-md text-sm flex items-center gap-1"
-                                data-tab="variation1">
-                                <i className="fas fa-circle-check text-green-500"></i> Variação 1
-                            </Button>
-                            <Button
-                                disabled={true}
-                                className="tab-button variation-tab-btn px-3 py-1 rounded-md text-sm flex items-center gap-1"
-                                data-tab="variation2">
-                                <X className="fas fa-circle-xmark text-gray-400" /> Variação 2
-                            </Button>
-                            <Button
-                                disabled={true}
-                                className="tab-button variation-tab-btn px-3 py-1 rounded-md text-sm flex items-center gap-1"
-                                data-tab="variation3">
-                                <X className="fas fa-circle-xmark text-gray-400" /> Variação 3
-                            </Button>
+                            {
+                                exercicio.variacao && (
+                                    <div className='flex gap-2'>
+                                        {
+                                            listaVariacoes.map((variacao, index) => (
+                                                <Button key={index}
+                                                    onClick={() => {
+                                                        setVariacao({
+                                                            instrucoes: variacao.descricao,
+                                                            linkvideo: variacao.palavras[0].video,
+                                                            titulo: variacao.titulo
+                                                        })
+                                                    }
+                                                    }
+                                                >
+                                                    {`Variação ${index + 1}`}
+                                                </Button>
+                                            ))
+                                        }
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
 
                     {/* <!-- Variação 1 --> */}
-                    <Variation instrucoes={variacaoes.instrucoes} linkvideo={variacaoes.linkvideo} />
+                    <Variation instrucoes={variacao.instrucoes} linkvideo={variacao.linkvideo} />
 
 
                 </section>
@@ -139,14 +163,14 @@ function RouteComponent() {
                     <div className="bg-white rounded-xl shadow-md overflow-hidden">
                         <div className="p-4 border-b">
                             <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                                <i className="fas fa-camera text-blue-500"></i> Praticar com sua Webcam
+                                <Camera /> Praticar com sua Webcam
                             </h3>
                         </div>
                         <div className="p-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
                                 <div className="flex justify-center gap-4">
-                                    <CameraComponent exercicio={exercicio} setRealizandoExercicio={setRealizandoExercicio} setRespostaReconhecimento={setRespostaReconhecimento} />
+                                    <CameraComponent titulo={variacao.titulo} setRealizandoExercicio={setRealizandoExercicio} setRespostaReconhecimento={setRespostaReconhecimento} />
                                 </div>
 
 
@@ -161,8 +185,8 @@ function RouteComponent() {
 
                                         {/* <!-- Barra de Progresso --> */}
                                         <div className="w-full flex justify-center ">
-                                            { realizandoExercicio && <Loader className='animate-spin' />}
-                                            { respostaRecinhecido && <p className='text-green-600 font-bold'> {respostaRecinhecido} </p>}
+                                            {realizandoExercicio && <Loader className='animate-spin' />}
+                                            {respostaRecinhecido && <p className='text-green-600 font-bold'> {respostaRecinhecido} </p>}
                                         </div>
 
                                         {/* <!-- Dicas --> */}
@@ -192,7 +216,7 @@ function RouteComponent() {
                     <div className="bg-white rounded-xl shadow-md overflow-hidden">
                         <div className="p-4 border-b">
                             <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                                <ArrowBigRight/> Próximos passos
+                                <ArrowBigRight /> Próximos passos
                             </h3>
                         </div>
                         <div className="p-6">
@@ -218,7 +242,7 @@ function RouteComponent() {
                                     </div>
                                 </Link>
 
-                            
+
                                 <a>
                                     <div
                                         className="bg-purple-50 p-4 rounded-lg border border-purple-200 hover:border-purple-400 transition h-full">
@@ -242,9 +266,9 @@ function RouteComponent() {
 
 
                                 {
-                                    exercicio.prox_tarefa != null &&
+                                    exercicio.proxTarefa != null &&
 
-                                    <Link reloadDocument={true} to='/exercicios/$categoriaExercicio' replace={true} params={{ categoriaExercicio: exercicio.prox_tarefa ?? '' }}>
+                                    <Link reloadDocument={true} to='/exercicios/$categoriaExercicio' replace={true} params={{ categoriaExercicio: exercicio.proxTarefa ?? '' }}>
                                         <div
                                             className="bg-blue-50 p-4 rounded-lg border border-blue-200 hover:border-blue-400 transition h-full">
                                             <div className="flex items-center gap-3 mb-3">
@@ -255,7 +279,7 @@ function RouteComponent() {
                                                 </div>
                                                 <h4 className="font-medium">Próximo exercício</h4>
                                             </div>
-                                            <p className="text-sm text-gray-600 mb-2">Avançar para o sinal {exercicio.prox_tarefa}</p>
+                                            <p className="text-sm text-gray-600 mb-2">Avançar para o sinal {exercicio.proxTarefa}</p>
                                             <div className="flex items-center text-blue-600 text-sm font-medium">
                                                 <span> Começar agora </span>
                                                 <ChevronRight
@@ -275,7 +299,3 @@ function RouteComponent() {
     </Layout>
 
 }
-
-
-
-

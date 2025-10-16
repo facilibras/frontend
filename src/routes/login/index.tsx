@@ -5,7 +5,7 @@ import { Button } from '../../components/ui/button'
 import { useNavigate } from '@tanstack/react-router'
 import { useUserStore } from '../../store/user'
 import { toast } from 'react-toastify'
-import { LockKeyhole, Mail } from 'lucide-react'
+import { LockKeyhole, Mail, Eye } from 'lucide-react'
 
 
 export const Route = createFileRoute('/login/')({
@@ -90,6 +90,22 @@ function RouteComponent() {
                 id='senha'
                 required
               />
+              <div className='absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer'>
+                <button
+                type='button'
+                  onClick={()=>{
+                    const inputSenha = document.getElementById('senha') as HTMLInputElement
+                    if (inputSenha.type === 'password') {
+                      inputSenha.type = 'text'
+                    }
+                    else {
+                      inputSenha.type = 'password'
+                    }
+                  }}
+                >
+                  <Eye size={16}/>
+                </button>
+              </div>
             </div>
 
           </div>

@@ -5,9 +5,11 @@ import { ProtectedRoute } from '../../components/ProtectedRoute'
 import { backendConnection } from '../../utils/axios'
 import { useEffect, useState } from 'react'
 import { exercicio, secao } from '../../const/exercicios.const'
-import { CheckCheck, Hand, CirclePlay, ArrowRight, Hourglass } from 'lucide-react'
+import { CheckCheck, CirclePlay, ArrowRight, Hourglass } from 'lucide-react'
 import { Input } from '../../components/ui/input'
 import { Button } from '../../components/ui/button'
+import { categoriaColor } from '../../const/cores.const'
+import React from 'react'
 
 export const Route = createFileRoute('/exercicios/')({
   component: () => (
@@ -16,32 +18,6 @@ export const Route = createFileRoute('/exercicios/')({
     </ProtectedRoute>
   )
 })
-interface Propriedades {
-  texto: string,
-  bg: string,
-  bgColor: string
-}
-interface CategoriaCores {
-  [key: string]: Propriedades
-}
-
-const categoriaColor: CategoriaCores = {
-  "Alfabeto": {
-    texto: "text-blue-600",
-    bg: "bg-blue-50",
-    bgColor: "bg-blue-600"
-  },
-  "Números": { 
-    texto: "text-green-600",
-    bg: "bg-green-50",
-    bgColor: "bg-green-600"
-  },
-  "Animais": {
-    texto: "text-red-600",
-    bg: "bg-red-50",
-    bgColor: "bg-red-600"
-  },
-}
 
 function RouteComponent() {
 
@@ -80,21 +56,39 @@ function RouteComponent() {
     getExercicios()
   }, [])
 
+  async function getExerciciosPorSecao(secao: string) {
+
+    const getexercicios = await backendConnection.useAxiosConnection({
+      method: 'GET',
+      path: `/exercicios/secoes/${secao}`,
+    })
+    if (getexercicios) {
+      setExercicios(getexercicios)
+      setSecaoSelecionada(secaoSelecionada === secao ? null : secao)
+    }
+  }
+
 
   return <Layout>
     <div className="flex w-full items-center flex-col gap-4 mt-4 p-5">
       <p className='font-bold text-3xl text-left w-full'> Exercícios </p>
 
       <div className='flex gap-2 justify-between flex-wrap items-center w-full'>
-        <div className='flex gap-2 items-center'>
+        <div className='flex gap-2 items-center flex-wrap'>
           {
             secoes.map((secao, index) => (
               <Button
                 key={index}
-                onClick={() =>
-                  setSecaoSelecionada(
-                    secaoSelecionada === secao.nome ? null : secao.nome
-                  )
+                onClick={() =>{
+                  
+                  if (secaoSelecionada === secao.nome) {
+                    setExercicios(fetchExercicios);
+                    setSecaoSelecionada(null);
+                    return;
+                  }
+                  getExerciciosPorSecao(secao.nome)
+                }
+                  
                 }
                 className={`rounded-md border text-sm shadow-sm transition-all border-none
                 ${secaoSelecionada === secao.nome
@@ -109,7 +103,7 @@ function RouteComponent() {
                       : " text-gray-700"
                     }
                   `}>
-                  {secao.qtd_ex}
+                  {secao.qtdEx}
                 </span>
               </Button>
             ))
@@ -153,13 +147,13 @@ function RouteComponent() {
                     } flex items-center justify-center relative`}
                 >
                   <div className="flex flex-col items-center justify-center h-full">
-                    <Hand
-                      className={`${categoriaColor[exercicio.secao]?.texto || "text-gray-700"
-                        }`}
-                      size={50}
-                    />
-                    <p className={`font-medium ${categoriaColor[exercicio.secao]?.texto || "text-gray-700"}`}
-                    >
+                    
+                    {
+                      categoriaColor[exercicio.secao].icon &&
+                      React.createElement(categoriaColor[exercicio.secao].icon, { size: 50, color: categoriaColor[exercicio.secao].hex } )
+                    }
+                    
+                    <p className={`font-medium ${categoriaColor[exercicio.secao]?.texto || "text-gray-700"}`}>
                       Praticar agora
                     </p>
                   </div>
@@ -172,21 +166,18 @@ function RouteComponent() {
                 </div>
                 <div className="p-4">
                   <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-xl font-semibold text-gray-800 mb-2 capitalize">
+                    <h3 className="text-xl text-center font-semibold text-gray-800 mb-2 capitalize">
                       {exercicio.titulo.split("_")[0]}{" "}
                       {exercicio.titulo.split("_")[1]?.toLocaleUpperCase()}
                     </h3>
                     <div>
                       {exercicio.status == null ? (
-                        <Hourglass color="orange" size={20} />
+                        <Hourglass color="red" size={20} />
                       ) : (
                         <CheckCheck color="green" />
                       )}
                     </div>
                   </div>
-                  <p className="text-gray-600 text-sm mb-4">
-                    {exercicio.descricao}
-                  </p>
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       <CirclePlay
@@ -197,7 +188,9 @@ function RouteComponent() {
                         size={20}
                       />
                       <span className="text-xs text-gray-500">
-                        1 {"1" == "1" ? "Variação" : "Variações"}
+
+                        {exercicio.variacao == null ? " 1 Variação" : "2 Variações"}
+                      
                       </span>
                     </div>
                     <div className="flex justify-center items-center gap-2">

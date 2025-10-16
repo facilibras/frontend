@@ -1,20 +1,19 @@
 import { Button } from "./ui/button"
-import { exercicio } from "../const/exercicios.const"
 import { Camera } from "../utils/camera"
 import { useEffect, useState } from "react"
 import { backendConnection } from "../utils/axios"
 import { toast } from "react-toastify"
 
 interface CameraCompProps {
-  exercicio: exercicio,
+  titulo: string,
   setRealizandoExercicio: (change: boolean) => void,
   setRespostaReconhecimento: (resposta: string) => void
 }
 
-export default function CameraComponent({ exercicio, setRealizandoExercicio, setRespostaReconhecimento}: CameraCompProps) {
+export default function CameraComponent({ titulo, setRealizandoExercicio, setRespostaReconhecimento}: CameraCompProps) {
 
   const [countdown, setCountdown] = useState<number>(0);
-  const [Mensagem, setMensagem] = useState(exercicio.titulo)
+  const [Mensagem, setMensagem] = useState(titulo)
   const [video, setVideo] = useState<FormData | null>(null)
   const [isRecording, setIsRecording] = useState(false);
   const camera = new Camera();
@@ -29,7 +28,7 @@ export default function CameraComponent({ exercicio, setRealizandoExercicio, set
         method: 'POST',
         path: '/exercicios',
         dataValues: video,
-        subpath: `${exercicio.titulo}/reconhecer/`,
+        subpath: `${titulo}/reconhecer/`,
         headers: {
           'Content-Type': 'multipart/form-data',
         },

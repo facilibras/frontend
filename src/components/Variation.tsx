@@ -1,5 +1,5 @@
 interface VariationProps {
-    instrucoes: string[];
+    instrucoes: string;
     linkvideo: string;
 }
 
@@ -25,7 +25,7 @@ export default function Variation({ instrucoes, linkvideo }: VariationProps) {
                 <h4 className="text-lg font-medium text-gray-800 mb-2"> Como fazer: </h4>
                 <ul className="list-disc pl-5 text-gray-700 space-y-1">
                     {
-                        instrucoes.map((instrucao, index) => (
+                        instrucoes.split('\n').map((instrucao, index) => (
                             <li key={index}>{instrucao}</li>
                         ))
                     }
