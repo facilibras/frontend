@@ -39,7 +39,7 @@ function RootComponent() {
   }
 
   return (
-    <body className='bg-gray-50 min-h-screen w-full'>
+    <div className='bg-gray-50 min-h-screen w-full'>
       <div className="">
         <ToastContainer />
         <Outlet />
@@ -67,7 +67,7 @@ function RootComponent() {
             Fonte</span>
         </Button>
       </div>
-    </body>
+    </div>
 
   )
 }
