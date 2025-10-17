@@ -1,30 +1,21 @@
 import { Link } from "@tanstack/react-router"
-import { Book, User2, ChevronRight } from "lucide-react"
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
+import { Book, } from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarGroup,
     SidebarGroupLabel,
     SidebarHeader,
-    SidebarMenu,
-    SidebarMenuItem,
-    SidebarMenuButton,
 } from "./ui/sidebar"
-import { useUserStore } from '../store/user'
 import { useEffect, useState } from "react"
 import { backendConnection } from "../utils/axios"
-import { exercicio } from "../const/exercicios.const"
-import { useNavigate } from "@tanstack/react-router"
+import { exercicio, secao } from "../const/exercicios.const"
+import { GetExerciciosSecoes } from "../Services/GetExerciciosSecoes"
 
 export function AppSidebar() {
 
-    const { states: { user } } = useUserStore();
-    const navigate = useNavigate()
-    const UserName = `${user?.nome_usuario.split(" ")[0]} ${user?.nome_usuario.split(" ")[2][0].toUpperCase()}.` || 'Convidado'
     const [exercicios, setExercicios] = useState<exercicio[]>([])
-
+    const [secoes, setSecoes] = useState<secao[]>([])
     async function getExercicios() {
 
         const getexercicios = await backendConnection.useAxiosConnection({
@@ -35,15 +26,32 @@ export function AppSidebar() {
             setExercicios(getexercicios)
         }
     }
+    async function getSecoes() {
+        try {
+            const secoesData = await GetExerciciosSecoes();
+            console.log(secoesData)
+            if (secoesData) {
+                setSecoes(secoesData);
+            }
+        }
+        catch (error) {
+            console.error("Error in getSecoes:", error);
+        }
+    }
+
+    async function getExerciciosPorSecao(nome: string): Promise<exercicio[]> {
+        const exerciciosData = await backendConnection.useAxiosConnection({
+            method: 'GET',
+            path: `exercicios/secao/${nome}`,
+        })
+        return exerciciosData
+    }
 
     useEffect(() => {
+
+        getSecoes()
         getExercicios()
     }, [])
-
-    const Deslogar = () => {
-        localStorage.removeItem("token")
-        navigate({to:"/login"})
-    }
 
     return (
         <Sidebar>
@@ -51,28 +59,27 @@ export function AppSidebar() {
                 <Link to="/dashboard"><p className="font-bold text-2xl text-black">Facilibras</p></Link>
             </SidebarHeader>
             <SidebarContent>
-                <SidebarGroup >
-                    <SidebarGroupLabel>Exercícios</SidebarGroupLabel>
-                    {
-                        exercicios.map((exercicio, index) => {
-                            if (exercicio.status == null && index < 10) {
-                                return (
-                                    <div className="flex justify-start items-center" key={exercicio.titulo}>
-                                        <Book color="black" size={16} className="mr-2" />
-                                        <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: exercicio.titulo }} reloadDocument>
-                                            <p className="text-black capitalize ">{exercicio.titulo.split('_')[0]} {exercicio.titulo.replace("_"," ").split(" ")[1]} </p>
-                                        </Link>
-                                    </div>
-                                )
+                {
+                    secoes.map((secao, index) => (
+                        <SidebarGroup key={index} >
+                            <SidebarGroupLabel>
+                                {secao.nome}
+                            </SidebarGroupLabel>
+                            {
+                                exercicios.filter(exercicio => exercicio.secao === secao.nome).map((exercicioFiltrado: exercicio, idx) => (
+                                    !exercicioFiltrado.status && (
+                                        <div className="flex justify-start items-center" key={idx}>
+                                            <Book color="black" size={16} className="mr-2" />
+                                            <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: exercicioFiltrado.titulo }} reloadDocument>
+                                                <p className="text-black capitalize ">{exercicioFiltrado.titulo.split('_')[0]} {exercicioFiltrado.titulo.replace("_", " ").split(" ")[1]} </p>
+                                            </Link>
+                                        </div>
+                                    )
+                                ))
                             }
-                        })
-                    }
-                </SidebarGroup>
-                <SidebarGroup >
-                    <SidebarGroupLabel>
-                        Aulas
-                    </SidebarGroupLabel>
-                </SidebarGroup>
+                        </SidebarGroup>
+                    ))
+                }
             </SidebarContent>
         </Sidebar>
     )

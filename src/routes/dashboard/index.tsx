@@ -30,7 +30,6 @@ function RouteComponent() {
         })
         if (userdata) {
             setUserInfo(userdata)
-            console.log(userdata)
         }
     }
 
@@ -94,7 +93,7 @@ function RouteComponent() {
                 {/* Novidades */}
                 <div className='bg-blue-600 h-1/2 rounded-3xl m-2 p-13 w-full'>
                     <p className='text-white font-bold text-2xl text-center'>
-                        Mais 50 Palavras adicionadas no nosso dicionario na ultima semana
+                        Mais 50 Palavras adicionadas no nosso dicionário na última semana
                     </p>
                 </div>
             </div>

@@ -1,12 +1,11 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { backendConnection } from '../../utils/axios'
 import { Input } from '../../components/ui/input'
 import { Button } from '../../components/ui/button'
-import { useNavigate } from '@tanstack/react-router'
 import { useUserStore } from '../../store/user'
 import { toast } from 'react-toastify'
-import { LockKeyhole, Mail, Eye } from 'lucide-react'
-
+import { LockKeyhole, Mail, Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/login/')({
   component: RouteComponent,
@@ -15,37 +14,45 @@ export const Route = createFileRoute('/login/')({
 function RouteComponent() {
 
   const { actions: { addUser } } = useUserStore();
-
-  const navigate = useNavigate({ from: '/login' })
+  const navigate = useNavigate({from: '/login'})
+  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const realizarLogin = async () => {
 
-    const nomeInput = document.getElementById('nome') as HTMLInputElement | null;
-    const senhaInput = document.getElementById('senha') as HTMLInputElement | null;
+    if (!email || !password) {
+      toast.warn("Por favor, preencha o email e a senha.");
+      return;
+    }
 
-    const data = await backendConnection.useAxiosConnection({
-      method: 'POST',
-      path: '/login',
-      dataValues: {
-        username: nomeInput?.value,
-        password: senhaInput?.value
-      },
-      headers: {
-        'Content-Type': "application/x-www-form-urlencoded",
+    try {
+      const data = await backendConnection.useAxiosConnection({
+        method: 'POST',
+        path: '/login',
+        dataValues: { username: email, password: password },
+        headers: {
+          'Content-Type': "application/x-www-form-urlencoded",
+        }
+      });
+
+      
+      if (data.status === 200) {
+
+        localStorage.setItem('token', data.data.token);
+        addUser(data.data.token);
+        toast.success("Login realizado com sucesso!");
+        navigate({to: '/dashboard' });
       }
-    })
-
-    if (data.status === 200) {
-
-      localStorage.setItem('token', data.data.token)
-
-      addUser(data.data.token)
-      navigate({ to: '/dashboard' })
+      else{
+        toast.error(data.data.detail || "Erro ao fazer login. Tente novamente.");
+      }
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.detail || "Erro ao fazer login. Tente novamente.";
+      toast.error(errorMessage);
     }
-    else {
-      toast.error(data.response.data.detail)
-    }
-  }
+  };
 
 
 
@@ -72,42 +79,37 @@ function RouteComponent() {
                 id='nome'
                 className='w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200'
                 required
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
 
-          <div className=''>
+          <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'> Senha </label>
             <div className='relative'>
               <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
                 <LockKeyhole className='text-gray-400' size={16} />
               </div>
-
               <Input
                 placeholder='••••••••'
-                type='password'
-                className='w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200'
+                type={showPassword ? 'text' : 'password'}
                 id='senha'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className='w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200'
                 required
               />
-              <div className='absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer'>
+              <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
                 <button
-                type='button'
-                  onClick={()=>{
-                    const inputSenha = document.getElementById('senha') as HTMLInputElement
-                    if (inputSenha.type === 'password') {
-                      inputSenha.type = 'text'
-                    }
-                    else {
-                      inputSenha.type = 'password'
-                    }
-                  }}
+                  type='button'
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="p-1 text-gray-500 hover:text-gray-700"
+                  aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                 >
-                  <Eye size={16}/>
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
-
           </div>
 
           <Button

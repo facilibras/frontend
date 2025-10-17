@@ -74,7 +74,7 @@ function RouteComponent() {
       <p className='font-bold text-3xl text-left w-full'> Exercícios </p>
 
       <div className='flex gap-2 justify-between flex-wrap items-center w-full'>
-        <div className='flex gap-2 items-center flex-wrap'>
+        <div className='flex gap-2 items-center w-full flex-wrap'>
           {
             secoes.map((secao, index) => (
               <Button
@@ -90,7 +90,7 @@ function RouteComponent() {
                 }
                   
                 }
-                className={`rounded-md border text-sm shadow-sm transition-all border-none
+                className={`rounded-md border  text-sm shadow-sm transition-all border-none
                 ${secaoSelecionada === secao.nome
                     ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-800"
                     : "border-slate-300 text-slate-600 hover:bg-slate-100 bg-white"
@@ -125,7 +125,6 @@ function RouteComponent() {
                   ex.titulo.toLowerCase().includes(searchTerm)
                 )
               );
-              console.log(exercicios)
             }}
           />
         </div>

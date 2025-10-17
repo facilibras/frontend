@@ -1,7 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { ProtectedRoute } from '../../components/ProtectedRoute'
 
 export const Route = createFileRoute('/perfil/')({
-  component: RouteComponent,
+  component: ( )=> (
+      <ProtectedRoute>
+        <RouteComponent/>
+      </ProtectedRoute>
+    ),
 })
 
 function RouteComponent() {

@@ -6,9 +6,14 @@ import { useState, useEffect } from 'react'
 import { usuario } from '../../const/usuario.conts'
 import { CheckCircle, Medal, Pen, Star } from 'lucide-react'
 import { categoriaColor } from '../../const/cores.const'
+import { ProtectedRoute } from '../../components/ProtectedRoute'
 
 export const Route = createFileRoute('/perfil/$idUsuario')({
-    component: RouteComponent,
+    component: () => (
+        <ProtectedRoute>
+            <RouteComponent />
+        </ProtectedRoute>
+    ),
 })
 
 function RouteComponent() {
@@ -25,7 +30,7 @@ function RouteComponent() {
         if (userdata) {
             setUserInfo(userdata)
             console.log(userdata)
-        }   
+        }
     }
 
     useEffect(() => {

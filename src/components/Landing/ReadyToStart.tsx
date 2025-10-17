@@ -9,7 +9,7 @@ export const ReadyToStart = () => {
                 <p className="text-xl mb-8 opacity-90">Dê o primeiro passo para aprender Libras com uma plataforma feita
                     para facilitar seu aprendizado.</p>
                 
-                <Link to="/login">
+                <Link to="/register">
                     <button
                         className="bg-white cursor-pointer hover:bg-gray-100 text-blue-600 font-bold py-4 px-8 rounded-full text-lg transition flex items-center gap-2 mx-auto">
                         <UserPlus className="h-5 w-5" /> <span>Criar Conta Gratuita</span>

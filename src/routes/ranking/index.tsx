@@ -1,15 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Navbar } from '../../components/Landing/Navbar'
-import Footer from '../../components/Footer'
-
 import { RankingUser } from '../../Models/RankingUser'
 import { useEffect, useState } from 'react'
 import { GetRankingBySelectedPeriod } from '../../Services/GetRankingBySelectedPeriod'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
 import { RankingList } from '../../components/Ranking/RankingList'
+import Layout from '../../components/Layout'
+import { ProtectedRoute } from '../../components/ProtectedRoute'
 
 export const Route = createFileRoute('/ranking/')({
-  component: RouteComponent,
+  component: ( )=> (
+    <ProtectedRoute>
+      <RouteComponent/>
+    </ProtectedRoute>
+  ),
 })
 
 function RouteComponent() {
@@ -43,8 +46,7 @@ function RouteComponent() {
   }, [])
 
   return (
-    <>
-        <Navbar />
+        <Layout>
         <main className='container mx-auto px-4 pt-8'>
              <section className="mb-8 text-center">
               <h1 className="text-4xl font-bold text-gray-800 mb-2">Ranking de Aprendizado</h1>
@@ -83,9 +85,6 @@ function RouteComponent() {
               <TabsContent value="alltime" className='block'><RankingList users={users} loading={loading} /></TabsContent>
             </Tabs>
         </section>
-
-
-        <Footer />
-    </> 
+        </Layout>
     )
 }
