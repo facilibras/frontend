@@ -73,8 +73,8 @@ function RouteComponent() {
     <div className="flex w-full items-center flex-col gap-4 mt-4 p-5">
       <p className='font-bold text-3xl text-left w-full'> Exercícios </p>
 
-      <div className='flex gap-2 justify-between flex-wrap items-center w-full'>
-        <div className='flex gap-2 items-center w-full flex-wrap'>
+      <div className='flex gap-2 justify-between flex-wrap lg:flex-nowrap items-center w-full'>
+        <div className='flex gap-2 items-center flex-wrap'>
           {
             secoes.map((secao, index) => (
               <Button
@@ -90,7 +90,7 @@ function RouteComponent() {
                 }
                   
                 }
-                className={`rounded-md border  text-sm shadow-sm transition-all border-none
+                className={`rounded-full border  text-sm shadow-sm transition-all border-none
                 ${secaoSelecionada === secao.nome
                     ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-800"
                     : "border-slate-300 text-slate-600 hover:bg-slate-100 bg-white"
@@ -109,11 +109,11 @@ function RouteComponent() {
             ))
           }
         </div>
-        <div>
+        <div className='lg:w-1/3 w-full'>
           <Input
             type="text"
             placeholder="Pesquisar exercício..."
-            className="w-64 border-2 border-black"
+            className="border-2 border-black w-full"
             onChange={(e) => {
               const searchTerm = e.target.value.toLowerCase();
               if (searchTerm === "") {
@@ -142,7 +142,7 @@ function RouteComponent() {
             >
               <div className="sign-card bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-1 transition">
                 <div
-                  className={`h-48 ${categoriaColor[exercicio.secao]?.bg || "bg-gray-100"
+                  className={`h-48 ${categoriaColor[exercicio.secao].bg || "bg-gray-100"
                     } flex items-center justify-center relative`}
                 >
                   <div className="flex flex-col items-center justify-center h-full">
@@ -157,17 +157,17 @@ function RouteComponent() {
                     </p>
                   </div>
                   <span
-                    className={`absolute top-3 left-3 ${categoriaColor[exercicio.secao]?.bgColor || "bg-gray-500"
+                    className={`absolute top-3 left-3 ${categoriaColor[exercicio.secao].bgColor || "bg-gray-500"
                       } text-white text-xs px-2 py-1 rounded`}
                   >
-                    Básico
+                    {exercicio.secao}
                   </span>
                 </div>
                 <div className="p-4">
                   <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-xl text-center font-semibold text-gray-800 mb-2 capitalize">
+                    <h3 className="text-xl text-center capitalize font-semibold text-gray-800 mb-2">
                       {exercicio.titulo.split("_")[0]}{" "}
-                      {exercicio.titulo.split("_")[1]?.toLocaleUpperCase()}
+                      {exercicio.titulo.split("_")[1]}
                     </h3>
                     <div>
                       {exercicio.status == null ? (

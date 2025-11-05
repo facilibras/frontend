@@ -1,7 +1,7 @@
 export interface usuario {
   nomeOuApelido: string,
   imagemFundo: string,
-  imagemPerfil: string,
+  imagemPerfil: string | Blob,
   aprendendoDesde: string,
   progresso: {
     qtdSinaisAprendidos: number,

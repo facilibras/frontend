@@ -57,4 +57,12 @@ export const Colors: Record<string, { containerBG: string; iconColor: string; te
         buttonBG: 'bg-gray-500 hover:bg-gray-800 text-white',
         Icon: HandCoins
     },
+    Frases: {
+        containerBG: 'bg-purple-50',
+        iconColor: 'text-purple-500',
+        textColor: 'text-purple-600',
+        chipBG: 'text-purple-500',
+        buttonBG: 'bg-purple-500 hover:bg-purple-800 text-white',
+        Icon: BookType
+    }
 };

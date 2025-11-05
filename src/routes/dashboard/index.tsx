@@ -43,9 +43,13 @@ function RouteComponent() {
     return <Layout>
         <div className='flex flex-col'>
             <div className=' flex flex-wrap lg:flex-nowrap mb-5'>
-                <div className='bg-blue-600 rounded-3xl w-full lg:w-1/2 h-auto m-2 p-4'> {/* Informações do usuario */}
-                    <div className='flex'> {/* Imagem e nome do usuario */}
-                        <img className='w-1/3 lg:w-2/5 rounded-full' src={userInfo?.imagemPerfil} alt="" />
+                <div className='bg-blue-600 rounded-3xl w-2/3 lg:w-1/2 h-auto m-2 p-4'> {/* Informações do usuario */}
+                    <div className='flex'> 
+
+                        {
+                            <img className='w-1/3 lg:w-2/5 rounded-full' src={""} alt="" />
+                        }
+                        
                         <div className='ml-2'>
                             <p className='font-bold text-2xl lg:text-3xl text-white'> Bem Vindo {UserName.split(" ")[0]}</p>
                             <p className='text-white text-2xl'> Nível : {Nivel}</p>
@@ -66,10 +70,8 @@ function RouteComponent() {
                         </div>
                     </div>
                 </div>
-                <div className='flex w-full h-full'> {/* Noticias */}
-                    <div className='bg-blue-600 h-[320px] rounded-3xl m-2 flex items-center justify-center w-full cursor-pointer hover:bg-blue-700 transition-all duration-300'> {/* Novo Quiz */}
-                        <p className='text-white font-bold text-2xl'> Novo Quiz disponivel</p>
-                    </div>
+                <div className='flex w-1/3 h-full'> {/* Noticias */}
+                    
                     <div className='p-5 w-full relative bg-blue-600 rounded-3xl m-2 overflow-hidden z-10 grow h-[320px]'> {/* Ofensiva */}
                         <div className='relative z-10'>
                             <p className='w-full font-bold p-2 text-white text-2xl text-center'>

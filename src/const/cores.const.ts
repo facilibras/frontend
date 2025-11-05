@@ -60,5 +60,19 @@ export const categoriaColor: CategoriaCores = {
     bgColor: "bg-indigo-600",
     icon: PersonStandingIcon,
     hex: "#4F46E5"
+  },
+  "Frases":{
+    texto:"",
+    bg:"",
+    bgColor:"",
+    icon: Hand,
+    hex: ""
+  },
+  "Primeiro Sinal":{
+    texto: "text-indigo-600",
+    bg: "bg-indigo-50",
+    bgColor: "bg-indigo-600",
+    icon: Hand,
+    hex: "#4F46E5"
   }
 }

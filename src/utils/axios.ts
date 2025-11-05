@@ -1,11 +1,12 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, ResponseType } from "axios";
 
 export interface requestProps {
     method: string,
     path: string
     subpath?: string,
     dataValues?: object,
-    headers?: object
+    headers?: object,
+    responseType?: ResponseType
 }
 
 class AxiosConnection {
@@ -32,15 +33,17 @@ class AxiosConnection {
         })
     }
 
-    async useAxiosConnection({ method, path, subpath, dataValues, headers={} }: requestProps) {
+    async useAxiosConnection({ method, path, subpath, dataValues, headers={}, responseType='json' }: requestProps) {
 
-        
+
         let finalPath = path;
         if (subpath) finalPath += `/${subpath}`
 
         if (method === 'GET') {
             try {
-                const { data } = await this.axioConnection.get(finalPath)
+                const { data } = await this.axioConnection.get(finalPath,{
+                    responseType: responseType
+                })
                 return data
 
             } catch (error) {
@@ -62,7 +65,9 @@ class AxiosConnection {
 
         }
         if (method === 'PUT') {
-            return await this.axioConnection.put(finalPath)
+            return await this.axioConnection.put(finalPath ,dataValues, {
+                headers,
+            })
         }
         if (method === 'DELETE') {
             return await this.axioConnection.delete(finalPath)

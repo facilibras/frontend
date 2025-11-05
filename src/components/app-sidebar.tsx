@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import { Book, } from "lucide-react"
+import Logo from '../assets/logo.webp'
 import {
     Sidebar,
     SidebarContent,
@@ -11,6 +11,9 @@ import { useEffect, useState } from "react"
 import { backendConnection } from "../utils/axios"
 import { exercicio, secao } from "../const/exercicios.const"
 import { GetExerciciosSecoes } from "../Services/GetExerciciosSecoes"
+import { Colors } from "../utils/ColorsCard"
+import React from "react"
+import { categoriaColor } from "../const/cores.const"
 
 export function AppSidebar() {
 
@@ -29,7 +32,6 @@ export function AppSidebar() {
     async function getSecoes() {
         try {
             const secoesData = await GetExerciciosSecoes();
-            console.log(secoesData)
             if (secoesData) {
                 setSecoes(secoesData);
             }
@@ -38,40 +40,42 @@ export function AppSidebar() {
             console.error("Error in getSecoes:", error);
         }
     }
-
-    async function getExerciciosPorSecao(nome: string): Promise<exercicio[]> {
-        const exerciciosData = await backendConnection.useAxiosConnection({
-            method: 'GET',
-            path: `exercicios/secao/${nome}`,
-        })
-        return exerciciosData
-    }
-
     useEffect(() => {
-
         getSecoes()
         getExercicios()
     }, [])
 
     return (
         <Sidebar>
-            <SidebarHeader className="text-center">
-                <Link to="/dashboard"><p className="font-bold text-2xl text-black">Facilibras</p></Link>
+            <SidebarHeader>
+                <div className="text-center flex justify-center gap-3">
+                    <img src={Logo} alt="Logo" width={44} height={44} />
+                    <Link to="/dashboard"><p className="font-bold text-2xl text-black">Facilibras</p></Link>
+                </div>
             </SidebarHeader>
             <SidebarContent>
                 {
                     secoes.map((secao, index) => (
                         <SidebarGroup key={index} >
-                            <SidebarGroupLabel>
-                                {secao.nome}
+                            <SidebarGroupLabel >
+                                <div className="w-full">
+                                    <p className={`${Colors[secao.nome].textColor}`}>{secao.nome}</p>
+                                    <hr className={`bg-blue-500 w-full border-1`}/>
+                                </div>
+
                             </SidebarGroupLabel>
                             {
-                                exercicios.filter(exercicio => exercicio.secao === secao.nome).map((exercicioFiltrado: exercicio, idx) => (
+                                exercicios.filter(exercicio => exercicio.secao === secao.nome).slice(0,3).map((exercicioFiltrado: exercicio, idx) => (
                                     !exercicioFiltrado.status && (
                                         <div className="flex justify-start items-center" key={idx}>
-                                            <Book color="black" size={16} className="mr-2" />
+
+                                           {React.createElement(Colors[secao.nome].Icon, { className: `${Colors[secao.nome].iconColor} mr-2`, size: 16 })}
                                             <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: exercicioFiltrado.titulo }} reloadDocument>
-                                                <p className="text-black capitalize ">{exercicioFiltrado.titulo.split('_')[0]} {exercicioFiltrado.titulo.replace("_", " ").split(" ")[1]} </p>
+                                                <p className="text-black capitalize ">
+                                                     
+                                                        {exercicioFiltrado.titulo.split('_')[0]} {exercicioFiltrado.titulo.split("_")[1]} {exercicioFiltrado.titulo.split("_")[2] ? "- Variação" : ""}
+                                                    
+                                                </p>
                                             </Link>
                                         </div>
                                     )
@@ -84,3 +88,4 @@ export function AppSidebar() {
         </Sidebar>
     )
 }
+
