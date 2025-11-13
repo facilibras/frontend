@@ -10,6 +10,7 @@ import { Input } from '../../components/ui/input'
 import { Button } from '../../components/ui/button'
 import { categoriaColor } from '../../const/cores.const'
 import React from 'react'
+import { highContrast ,highContrastBorder } from '../../const/highcontrat.const'
 
 export const Route = createFileRoute('/exercicios/')({
   component: () => (
@@ -71,7 +72,7 @@ function RouteComponent() {
 
   return <Layout>
     <div className="flex w-full items-center flex-col gap-4 mt-4 p-5">
-      <p className='font-bold text-3xl text-left w-full'> Exercícios </p>
+      <p className='font-bold text-3xl text-left w-full dark:text-white highcontrast:text-yellow-300'> Exercícios </p>
 
       <div className='flex gap-2 justify-between flex-wrap lg:flex-nowrap items-center w-full'>
         <div className='flex gap-2 items-center flex-wrap'>
@@ -90,17 +91,18 @@ function RouteComponent() {
                 }
                   
                 }
-                className={`rounded-full border  text-sm shadow-sm transition-all border-none
-                ${secaoSelecionada === secao.nome
-                    ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-800"
-                    : "border-slate-300 text-slate-600 hover:bg-slate-100 bg-white"
+                className={`rounded-full border text-sm shadow-sm transition-all dark:bg-gray-600 dark:text-white ${highContrastBorder } 
+                  
+                  ${secaoSelecionada === secao.nome
+                    ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-800"
+                    : "border-slate-300 text-slate-600 hover:bg-slate-100 bg-white dark:hover:bg-gray-700 "
                   }`}
-              >
+                >
                 {secao.nome}
                 <span className={`p-2 w-full text-md
                     ${secaoSelecionada === secao.nome
                       ? " text-white"
-                      : " text-gray-700"
+                      : " text-gray-700 dark:text-white highcontrast:text-yellow-300"
                     }
                   `}>
                   {secao.qtdEx}
@@ -113,7 +115,7 @@ function RouteComponent() {
           <Input
             type="text"
             placeholder="Pesquisar exercício..."
-            className="border-2 border-black w-full"
+            className="border-2 border-black dark:border-gray-300 w-full dark:text-white"
             onChange={(e) => {
               const searchTerm = e.target.value.toLowerCase();
               if (searchTerm === "") {
@@ -140,7 +142,7 @@ function RouteComponent() {
               key={exercicio.titulo}
               className="w-full"
             >
-              <div className="sign-card bg-white rounded-xl shadow-md overflow-hidden transform hover:-translate-y-1 transition">
+              <div className="bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden transform hover:-translate-y-1 transition">
                 <div
                   className={`h-48 ${categoriaColor[exercicio.secao].bg || "bg-gray-100"
                     } flex items-center justify-center relative`}
@@ -165,7 +167,7 @@ function RouteComponent() {
                 </div>
                 <div className="p-4">
                   <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-xl text-center capitalize font-semibold text-gray-800 mb-2">
+                    <h3 className="text-xl text-center capitalize font-semibold text-gray-800 dark:text-white mb-2">
                       {exercicio.titulo.split("_")[0]}{" "}
                       {exercicio.titulo.split("_")[1]}
                     </h3>
@@ -186,7 +188,7 @@ function RouteComponent() {
                         }
                         size={20}
                       />
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 dark:text-white">
 
                         {exercicio.variacao == null ? " 1 Variação" : "2 Variações"}
                       

@@ -4,13 +4,22 @@ import { useEffect, useState } from "react"
 import { backendConnection } from "../utils/axios"
 import { toast } from "react-toastify"
 
+export interface ResponseUpload {
+  sucesso: boolean,
+  feedback : Feedback[]
+}
+interface Feedback {
+  correto: boolean,
+  mensagem: string
+}
+
 interface CameraCompProps {
   titulo: string,
   setRealizandoExercicio: (change: boolean) => void,
-  setRespostaReconhecimento: (resposta: string) => void
+  setRespostaReconhecimento: (resposta: ResponseUpload) => void
 }
 
-export default function CameraComponent({ titulo, setRealizandoExercicio, setRespostaReconhecimento}: CameraCompProps) {
+export function CameraComponent({ titulo, setRealizandoExercicio, setRespostaReconhecimento}: CameraCompProps) {
 
   const [countdown, setCountdown] = useState<number>(0);
   const [Mensagem, setMensagem] = useState(titulo)
@@ -38,10 +47,10 @@ export default function CameraComponent({ titulo, setRealizandoExercicio, setRes
 
       if (response.data.sucesso) {
         console.log(response.data);
-        toast.success(response.data.mensagem)
-        setRespostaReconhecimento(response.data.mensagem)
+        toast.success("Sinal Reconhecido com Sucesso")
+        setRespostaReconhecimento(response.data)
       } else {
-        setRespostaReconhecimento(response.data.mensagem)
+        setRespostaReconhecimento(response.data )
         toast.error("Sinal Não reconhecido")
       }
     } catch (error) {
@@ -61,7 +70,7 @@ export default function CameraComponent({ titulo, setRealizandoExercicio, setRes
 
   const startCountdown = async (tempoGravacao: number) => {
     
-    setRespostaReconhecimento("")
+    setRespostaReconhecimento({sucesso: false, feedback: []})
     setIsRecording(true);
     const videoElement = document.getElementById("video") as HTMLVideoElement;
     

@@ -3,6 +3,7 @@
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant highcontrast (&:is(.highcontrast *));
 
 :root {
   font-family: 'Poppins', system-ui, Avenir, Helvetica, Arial, sans-serif;

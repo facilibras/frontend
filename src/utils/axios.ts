@@ -6,7 +6,8 @@ export interface requestProps {
     subpath?: string,
     dataValues?: object,
     headers?: object,
-    responseType?: ResponseType
+    responseType?: ResponseType,
+    params?: object
 }
 
 class AxiosConnection {
@@ -33,7 +34,7 @@ class AxiosConnection {
         })
     }
 
-    async useAxiosConnection({ method, path, subpath, dataValues, headers={}, responseType='json' }: requestProps) {
+    async useAxiosConnection({ method, path, subpath, dataValues, headers={}, responseType='json', params }: requestProps) {
 
 
         let finalPath = path;
@@ -42,7 +43,8 @@ class AxiosConnection {
         if (method === 'GET') {
             try {
                 const { data } = await this.axioConnection.get(finalPath,{
-                    responseType: responseType
+                    responseType: responseType,
+                    params: params
                 })
                 return data
 

@@ -1,13 +1,15 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import CameraComponent from '../../components/CameraComp';
+import { ResponseUpload, CameraComponent } from '../../components/CameraComp';
 import Variation from '../../components/Variation';
 import { backendConnection } from '../../utils/axios';
 import Layout from '../../components/Layout';
 import { useState, useEffect } from 'react';
 import { exercicio } from '../../const/exercicios.const';
 import { ProtectedRoute } from '../../components/ProtectedRoute';
-import { AlignJustify, ArrowBigRight, ChevronRight, RotateCwIcon, Loader, Camera, Video } from 'lucide-react';
+import { Loader, Camera, Video, Check, X } from 'lucide-react';
 import { Button } from '../../components/ui/button';
+import { ScrollArea } from '../../components/ui/scroll-area';
+import { Steps } from '../../components/Exercise/Page/Steps';
 
 export const Route = createFileRoute('/exercicios/$categoriaExercicio')({
     component: () =>
@@ -30,7 +32,7 @@ function RouteComponent() {
         titulo: ''
     })
     const [realizandoExercicio, setRealizandoExercicio] = useState(false)
-    const [respostaRecinhecido, setRespostaReconhecimento] = useState<string>('')
+    const [respostaRecinhecido, setRespostaReconhecimento] = useState<ResponseUpload>({ sucesso: false, feedback: [] })
     const [listaVariacoes, setListaVariacoes] = useState<exercicio[]>([])
     const [exercicio, setExercicio] = useState<exercicio>({
         descricao: '',
@@ -57,27 +59,28 @@ function RouteComponent() {
         if (getexercicio) {
 
             setExercicio(getexercicio)
+
             setVariacao({
                 instrucoes: getexercicio.descricao,
                 linkvideo: getexercicio.palavras[0].video,
                 titulo: getexercicio.titulo
             })
-            let possuiVariacão = true
+            let possuiVariacao = true
             let nextpath = getexercicio.variacao
-            setListaVariacoes(prev => [...prev, getexercicio])
 
-            while (possuiVariacão) {
+            while (possuiVariacao) {
 
                 const variacaoExercicio = await backendConnection.useAxiosConnection({
                     method: 'GET',
                     path: `/exercicios/${nextpath}`,
                 })
 
+
                 if (variacaoExercicio) {
                     setListaVariacoes(prev => [...prev, variacaoExercicio])
                     nextpath = variacaoExercicio.variacao
                     if (variacaoExercicio.variacao == null) {
-                        possuiVariacão = false
+                        possuiVariacao = false
                     }
                 }
             }
@@ -85,7 +88,9 @@ function RouteComponent() {
     }
 
     useEffect(() => {
-        getExercicio()
+        const funcao = async () => await getExercicio()
+
+        funcao()
     }, [])
 
     return <Layout>
@@ -99,13 +104,13 @@ function RouteComponent() {
                                 <Link to='/exercicios' className='text-blue-600 hover:text-blue-800 transition flex items-center'> Voltar para exercícios </Link>
                                 <span className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full capitalize"> {exercicio.secao} </span>
                             </div>
-                            <h2 className="text-3xl md:text-4xl font-bold capitalize text-gray-800 mb-2">Exercício:
+                            <h2 className="text-3xl md:text-4xl font-bold capitalize text-gray-800 mb-2 dark:text-white">Exercício:
                                 {" "}
                                 {exercicio.titulo.split('_')[0]}
                                 {" "}
                                 {exercicio.titulo.split("_")[1]}
                             </h2>
-                            <p className="text-lg text-gray-600"> Aprenda e pratique o sinal de saudação básica em Libras.</p>
+                            <p className="text-lg text-gray-600 dark:text-white"> Aprenda e pratique o sinal de saudação básica em Libras.</p>
                         </div>
 
                         {/* <div className="flex items-center gap-4">
@@ -170,7 +175,11 @@ function RouteComponent() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
                                 <div className="flex justify-center gap-4">
-                                    <CameraComponent titulo={variacao.titulo} setRealizandoExercicio={setRealizandoExercicio} setRespostaReconhecimento={setRespostaReconhecimento} />
+                                    <CameraComponent
+                                        titulo={variacao.titulo}
+                                        setRealizandoExercicio={setRealizandoExercicio}
+                                        setRespostaReconhecimento={setRespostaReconhecimento}
+                                    />
                                 </div>
 
 
@@ -184,9 +193,33 @@ function RouteComponent() {
                                         </div>
 
                                         {/* <!-- Barra de Progresso --> */}
-                                        <div className="w-full flex justify-center ">
+                                        <div className="w-full flex flex-col justify-center">
                                             {realizandoExercicio && <Loader className='animate-spin' />}
-                                            {respostaRecinhecido && <p className='text-green-600 font-bold'> {respostaRecinhecido} </p>}
+                                            <div>
+                                                {
+                                                    respostaRecinhecido.sucesso ?
+                                                        <p className='text-green-600 font-bold'> Parabéns Você Realizou o Sinal Corretamente</p> :
+                                                        <p className='text-red-600 font-bold'> Sinal Não Reconhecido Tente Novamente </p>
+                                                }
+                                            </div>
+
+
+                                            <ScrollArea className="sm:max-w-lg max-w-sm max-h-72 rounded-md mt-6">
+                                                <div className='flex flex-col'>
+                                                    {
+                                                        respostaRecinhecido.feedback.map((feed, index) => (
+                                                            <div key={index} className={`flex gap-3 ${feed.correto ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}`}>
+
+                                                                <div className='w-auto h-auto rounded-full shadow p-1 flex items-center justify-center'>
+                                                                    {feed.correto ? <Check color='green' /> : <X color='red' />}
+                                                                </div>
+
+                                                                {feed.mensagem}
+                                                            </div>
+                                                        ))
+                                                    }
+                                                </div>
+                                            </ScrollArea>
                                         </div>
 
                                         {/* <!-- Dicas --> */}
@@ -212,88 +245,7 @@ function RouteComponent() {
                     </div>
                 </section>
 
-                <section className="mb-12">
-                    <div className="bg-white rounded-xl shadow-md overflow-hidden">
-                        <div className="p-4 border-b">
-                            <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                                <ArrowBigRight /> Próximos passos
-                            </h3>
-                        </div>
-                        <div className="p-6">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                                <Link to='/exercicios' className="group">
-                                    <div
-                                        className="bg-green-50 p-4 rounded-lg border border-green-200 hover:border-green-400 transition h-full">
-                                        <div className="flex items-center gap-3 mb-3">
-                                            <div
-                                                className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 group-hover:bg-green-200 transition">
-                                                <AlignJustify />
-                                            </div>
-                                            <h4 className="font-medium">Mais exercícios</h4>
-                                        </div>
-                                        <p className="text-sm text-gray-600 mb-2">Explore outros sinais para praticar</p>
-                                        <div className="flex items-center text-green-600 text-sm font-medium">
-                                            <span> Ver todos </span>
-                                            <ChevronRight
-                                                className='ml-1 transition-transform group-hover:translate-x-1'
-                                            />
-                                        </div>
-                                    </div>
-                                </Link>
-
-
-                                <a>
-                                    <div
-                                        className="bg-purple-50 p-4 rounded-lg border border-purple-200 hover:border-purple-400 transition h-full">
-                                        <div className="flex items-center gap-3 mb-3">
-                                            <div
-                                                className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition">
-                                                <RotateCwIcon />
-                                            </div>
-                                            <h4 className="font-medium">Revisar</h4>
-                                        </div>
-                                        <p className="text-sm text-gray-600 mb-2">Assista novamente ao vídeo tutorial</p>
-                                        <div className="flex items-center text-purple-600 text-sm font-medium">
-                                            <span>Repetir</span>
-                                            <ChevronRight
-                                                className='ml-1 transition-transform group-hover:translate-x-1'
-                                            />
-                                        </div>
-                                    </div>
-                                </a>
-
-
-
-                                {
-                                    exercicio.proxTarefa != null &&
-
-                                    <Link reloadDocument={true} to='/exercicios/$categoriaExercicio' replace={true} params={{ categoriaExercicio: exercicio.proxTarefa ?? '' }}>
-                                        <div
-                                            className="bg-blue-50 p-4 rounded-lg border border-blue-200 hover:border-blue-400 transition h-full">
-                                            <div className="flex items-center gap-3 mb-3">
-                                                <div
-                                                    className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:bg-blue-200 transition">
-                                                    <i className="fas fa-hands"></i>
-                                                    <ArrowBigRight />
-                                                </div>
-                                                <h4 className="font-medium">Próximo exercício</h4>
-                                            </div>
-                                            <p className="text-sm text-gray-600 mb-2">Avançar para o sinal {exercicio.proxTarefa}</p>
-                                            <div className="flex items-center text-blue-600 text-sm font-medium">
-                                                <span> Começar agora </span>
-                                                <ChevronRight
-                                                    className='ml-1 transition-transform group-hover:translate-x-1'
-                                                />
-                                            </div>
-                                        </div>
-                                    </Link>
-                                }
-
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <Steps exercicio={exercicio}/>
             </main>
         </div>
     </Layout>

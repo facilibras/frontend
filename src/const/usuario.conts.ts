@@ -15,7 +15,7 @@ export interface usuario {
   conquistas: conquistasProsps[]
 }
 
-interface atividadeRes {
+export interface atividadeRes {
     atividade:string,
     data:string
 }

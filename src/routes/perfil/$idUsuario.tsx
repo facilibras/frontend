@@ -3,12 +3,13 @@ import { Button } from '../../components/ui/button'
 import Layout from '../../components/Layout'
 import React, { useState, useEffect } from 'react'
 import { usuario } from '../../const/usuario.conts'
-import { CheckCircle, Medal, Pen, Star } from 'lucide-react'
+import { CheckCircle, Medal, Star } from 'lucide-react'
 import { categoriaColor } from '../../const/cores.const'
 import { ProtectedRoute } from '../../components/ProtectedRoute'
 import { getUser } from '../../Services/getUser'
 import { DialogUserInfo } from '../../components/Dialog/PutUserInfo'
 import { useUserStore } from '../../store/user'
+import { ListaAtividades } from '../../components/Dialog/ListaAtividades'
 
 
 export const Route = createFileRoute('/perfil/$idUsuario')({
@@ -21,10 +22,10 @@ export const Route = createFileRoute('/perfil/$idUsuario')({
 
 function RouteComponent() {
 
-    const [imageUrl, setImageUrl] = useState< null | string >(null);
     const { states: { user } } = useUserStore();
+    const [ imageUrl, setImageUrl ] = useState< null | string >(null);
     const { idUsuario } = Route.useParams();
-    const [userInfo, setUserInfo] = useState<usuario>({
+    const [ userInfo, setUserInfo ] = useState<usuario>({
         imagemPerfil: '',
         nomeOuApelido: '',
         aprendendoDesde: '',
@@ -69,12 +70,15 @@ function RouteComponent() {
 
             <section className="bg-white rounded-xl shadow-md mt-0 lg:mt-8">
                 <div className="relative">
-                    {/* <!-- Cover Photo --> */}
-                    <div id="backgound" className=" lg:rounded-t-xl h-48 bg-gradient-to-r from-blue-500 to-blue-300 relative">
+                    <div id="backgound" className={`lg:rounded-t-xl h-48 bg-gradient-to-r 
+                        
+                        ${userInfo.imagemFundo ? userInfo.imagemFundo : 'from-blue-700 to-blue-400'} 
+                        
+                    relative`}>
                     </div>
 
                     {
-                        user?.id_usuario.toString() === idUsuario && <DialogUserInfo />
+                        user?.id_usuario.toString() === idUsuario && <DialogUserInfo nome={userInfo.nomeOuApelido} />
                     }
 
                     {/* <!-- Profile Picture and Basic Info --> */}
@@ -96,9 +100,9 @@ function RouteComponent() {
                             </div>
 
                             <div className="flex-1">
-                                <div className="flex md:flex-row md:items-center flex-wrap justify-between gap-4">
+                                <div className="flex md:flex-row md:items-center flex-wrap justify-between">
                                     <div>
-                                        <h1 className="text-3xl font-bold text-gray-800"> {userInfo?.nomeOuApelido} </h1>
+                                        <h1 className="text-2xl font-bold text-gray-800"> {userInfo?.nomeOuApelido} </h1>
 
                                     </div>
                                     <p className="text-gray-600">Aprendendo Libras desde {userInfo?.aprendendoDesde}</p>
@@ -111,7 +115,7 @@ function RouteComponent() {
                             <div className="mt-4 flex flex-wrap gap-4 justify-end">
                                 <div className="flex items-center bg-blue-50 px-4 py-2 rounded-lg">
                                     <Medal color="#155dfc" className='mr-2' />
-                                    <span className="font-medium">Nível: <span className="text-blue-600">5</span></span>
+                                    <span className="font-medium">Nível: <span className="text-blue-600">{userInfo.progresso.nivel}</span></span>
                                 </div>
                                 <div className="flex items-center bg-purple-50 px-4 py-2 rounded-lg">
                                     <Star color="#7e22ce" className='mr-2' fill='#7e22ce' />
@@ -129,7 +133,6 @@ function RouteComponent() {
             </section>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* <!-- Left Column --> */}
                 <div className="lg:col-span-2 space-y-6">
                     <div className="bg-white rounded-xl shadow-md p-6">
                         <h3 className="text-xl font-semibold text-gray-800 mb-4">Atividade Recente</h3>
@@ -150,21 +153,16 @@ function RouteComponent() {
                                 ))
                             }
                         </div>
-                        <Button className="mt-4 text-white hover:text-blue-800 text-sm font-medium flex items-center">
-                            Ver toda atividade <i className="fas fa-chevron-down ml-1"></i>
-                        </Button>
+                        <ListaAtividades atividades={userInfo?.atividadeRecente}/>
                     </div>
                 </div>
 
 
-                {/* <!-- Right Column --> */}
                 <div className="space-y-6">
-                    {/* <!-- Progress Overview --> */}
                     <section className="bg-white rounded-xl shadow-md p-6">
                         <h2 className="text-xl font-bold text-gray-800 mb-4">Progresso</h2>
 
                         <div className="space-y-5">
-                            {/* <!-- Overall Progress --> */}
                             <div>
                                 <div className="flex justify-between items-center mb-2">
                                     <h3 className="font-medium text-gray-700">Nível atual</h3>
@@ -190,7 +188,7 @@ function RouteComponent() {
                         <div className="grid grid-cols-3 gap-3">
 
                             {
-                                userInfo?.conquistas.map((conquista, index) => (
+                                userInfo?.conquistas.slice(0,3).map((conquista, index) => (
                                     <div key={index} className={`flex flex-col items-center`}>
                                         <div
                                             className={`w-16 h-16 ${categoriaColor[conquista.nome]?.bgColor} rounded-full flex items-center justify-center text-blue-600 mb-2`}>
