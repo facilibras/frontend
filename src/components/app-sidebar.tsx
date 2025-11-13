@@ -1,82 +1,94 @@
 import { Link } from "@tanstack/react-router"
-import { Book, User2,ChevronUp } from "lucide-react"
-import { DropdownMenu,DropdownMenuTrigger,DropdownMenuContent,DropdownMenuItem } from "./ui/dropdown-menu"
+import Logo from '../assets/logo.webp'
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarGroup,
     SidebarGroupLabel,
     SidebarHeader,
-    SidebarMenu,
-    SidebarMenuItem,
-    SidebarMenuButton,
-
-
 } from "./ui/sidebar"
-import {useUserStore} from '../store/user'
+import { useEffect, useState } from "react"
+import { backendConnection } from "../utils/axios"
+import { exercicio, secao } from "../const/exercicios.const"
+import { GetExerciciosSecoes } from "../Services/GetExerciciosSecoes"
+import { Colors } from "../utils/ColorsCard"
+import React from "react"
 
 export function AppSidebar() {
 
-    const { states: { user }} = useUserStore();
+    const [exercicios, setExercicios] = useState<exercicio[]>([])
+    const [secoes, setSecoes] = useState<secao[]>([])
+    async function getExercicios() {
+
+        const getexercicios = await backendConnection.useAxiosConnection({
+            method: 'GET',
+            path: '/exercicios',
+        })
+        if (getexercicios) {
+            setExercicios(getexercicios)
+        }
+    }
+    async function getSecoes() {
+        try {
+            const secoesData = await GetExerciciosSecoes();
+            if (secoesData) {
+                setSecoes(secoesData);
+            }
+        }
+        catch (error) {
+            console.error("Error in getSecoes:", error);
+        }
+    }
+    useEffect(() => {
+        getSecoes()
+        getExercicios()
+    }, [])
 
     return (
         <Sidebar>
-            <SidebarHeader className="text-center">
-                <Link to="/dashboard"><p className="font-bold text-2xl text-black">Facilibras</p></Link>
-            </SidebarHeader>
-            <SidebarContent>
-                <SidebarGroup >
-                    <SidebarGroupLabel>Exercícios</SidebarGroupLabel>
+            <SidebarHeader className="highcontrast:bg-black">
 
-                    <div className="flex justify-start items-center">
-                        <Book color="black" size={16} className="mr-2" />
-                        <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: 'dias-do-mes' }}>
-                            <p className="text-black">Dias do mes</p>
-                        </Link>
+                <Link to="/dashboard" >
+                    <div className="text-center flex justify-center gap-3 dark:bg-gray-900 highcontrast:bg-black">
+                        <img src={Logo} alt="Logo" width={44} height={44} />
+                        <p className="font-bold text-2xl text-black dark:text-white highcontrast:text-yellow-300">Facilibras</p>
                     </div>
-                    <div className="flex justify-start items-center">
-                        <Book color="black" size={16} className="mr-2" />
-                        <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: 'dias-da-semana' }}>
-                            <p className="text-black">Dias da Semana</p>
-                        </Link>
-                    </div>
-                </SidebarGroup>
-                <SidebarGroup >
-                    <SidebarGroupLabel>
-                        Aulas
-                    </SidebarGroupLabel>
-                </SidebarGroup>
+                </Link>
+
+            </SidebarHeader>
+            <SidebarContent className="w-full highcontrast:bg-black">
+                {
+                    secoes.map((secao, index) => (
+                        <SidebarGroup key={index}>
+                            <SidebarGroupLabel >
+                                <div className="w-full">
+                                    <p className={`${Colors[secao.nome].textColor}`}>{secao.nome}</p>
+                                    <hr className={`bg-blue-500 w-full border-1`} />
+                                </div>
+
+                            </SidebarGroupLabel>
+                            {
+                                exercicios.filter(exercicio => exercicio.secao === secao.nome).slice(0, 3).map((exercicioFiltrado: exercicio, idx) => (
+                                    !exercicioFiltrado.status && (
+                                        <div className="flex justify-start items-center" key={idx}>
+
+                                            {React.createElement(Colors[secao.nome].Icon, { className: `${Colors[secao.nome].iconColor} mr-2`, size: 16 })}
+                                            <Link to="/exercicios/$categoriaExercicio" params={{ categoriaExercicio: exercicioFiltrado.titulo }} reloadDocument>
+                                                <p className="text-black capitalize dark:text-white highcontrast:text-yellow-300">
+
+                                                    {exercicioFiltrado.titulo.split('_')[0]} {exercicioFiltrado.titulo.split("_")[1]} {exercicioFiltrado.titulo.split("_")[2] ? "- Variação" : ""}
+
+                                                </p>
+                                            </Link>
+                                        </div>
+                                    )
+                                ))
+                            }
+                        </SidebarGroup>
+                    ))
+                }
             </SidebarContent>
-            <SidebarFooter>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton className="text-white hover:text-white">
-                                    <User2 color="white"/> 
-                                    {user?.nome_usuario || 'Usuario'}
-                                    <ChevronUp className="ml-auto" />
-                                </SidebarMenuButton>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                side="top"
-                                className="w-[--radix-popper-anchor-width]"
-                            >
-                                <DropdownMenuItem>
-                                    <span>Account</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <span>Billing</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <span>Sign out</span>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarFooter>
-        </Sidebar>
+        </Sidebar >
     )
 }
+

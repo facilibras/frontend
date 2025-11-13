@@ -1,0 +1,26 @@
+export interface usuario {
+  nomeOuApelido: string,
+  imagemFundo: string,
+  imagemPerfil: string | Blob,
+  aprendendoDesde: string,
+  progresso: {
+    qtdSinaisAprendidos: number,
+    nivel: number,
+    pontosTotal: number,
+    pontosNivel: number,
+    pontosParaSubir: number,
+    msgProgresso: string
+  },
+  atividadeRecente: atividadeRes[],
+  conquistas: conquistasProsps[]
+}
+
+export interface atividadeRes {
+    atividade:string,
+    data:string
+}
+interface conquistasProsps{
+    id: number,
+    nome: string,
+    descricao: string
+}

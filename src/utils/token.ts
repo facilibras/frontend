@@ -7,10 +7,9 @@ export const jwtDecodeToken =  (token: string) => {
     try {
         const tokenDecoded: User = jwtDecode(token)
 
-        console.log(tokenDecoded)
+        //console.log(tokenDecoded)
 
         if (tokenDecoded && typeof tokenDecoded !== 'string') {
-            localStorage.setItem('token', token)
             return tokenDecoded as User;
         }
 

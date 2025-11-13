@@ -14,11 +14,14 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as TestsIndexImport } from './routes/tests/index'
 import { Route as RegisterIndexImport } from './routes/register/index'
+import { Route as RankingIndexImport } from './routes/ranking/index'
+import { Route as PerfilIndexImport } from './routes/perfil/index'
 import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as ExerciciosIndexImport } from './routes/exercicios/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AulasIndexImport } from './routes/aulas/index'
 import { Route as TestsCameraImport } from './routes/tests/camera'
+import { Route as PerfilIdUsuarioImport } from './routes/perfil/$idUsuario'
 import { Route as ExerciciosCategoriaExercicioImport } from './routes/exercicios/$categoriaExercicio'
 
 // Create/Update Routes
@@ -38,6 +41,18 @@ const TestsIndexRoute = TestsIndexImport.update({
 const RegisterIndexRoute = RegisterIndexImport.update({
   id: '/register/',
   path: '/register/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RankingIndexRoute = RankingIndexImport.update({
+  id: '/ranking/',
+  path: '/ranking/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PerfilIndexRoute = PerfilIndexImport.update({
+  id: '/perfil/',
+  path: '/perfil/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -71,6 +86,12 @@ const TestsCameraRoute = TestsCameraImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PerfilIdUsuarioRoute = PerfilIdUsuarioImport.update({
+  id: '/perfil/$idUsuario',
+  path: '/perfil/$idUsuario',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ExerciciosCategoriaExercicioRoute =
   ExerciciosCategoriaExercicioImport.update({
     id: '/exercicios/$categoriaExercicio',
@@ -94,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/exercicios/$categoriaExercicio'
       fullPath: '/exercicios/$categoriaExercicio'
       preLoaderRoute: typeof ExerciciosCategoriaExercicioImport
+      parentRoute: typeof rootRoute
+    }
+    '/perfil/$idUsuario': {
+      id: '/perfil/$idUsuario'
+      path: '/perfil/$idUsuario'
+      fullPath: '/perfil/$idUsuario'
+      preLoaderRoute: typeof PerfilIdUsuarioImport
       parentRoute: typeof rootRoute
     }
     '/tests/camera': {
@@ -131,6 +159,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexImport
       parentRoute: typeof rootRoute
     }
+    '/perfil/': {
+      id: '/perfil/'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof PerfilIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/ranking/': {
+      id: '/ranking/'
+      path: '/ranking'
+      fullPath: '/ranking'
+      preLoaderRoute: typeof RankingIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/register/': {
       id: '/register/'
       path: '/register'
@@ -153,11 +195,14 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/exercicios/$categoriaExercicio': typeof ExerciciosCategoriaExercicioRoute
+  '/perfil/$idUsuario': typeof PerfilIdUsuarioRoute
   '/tests/camera': typeof TestsCameraRoute
   '/aulas': typeof AulasIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/exercicios': typeof ExerciciosIndexRoute
   '/login': typeof LoginIndexRoute
+  '/perfil': typeof PerfilIndexRoute
+  '/ranking': typeof RankingIndexRoute
   '/register': typeof RegisterIndexRoute
   '/tests': typeof TestsIndexRoute
 }
@@ -165,11 +210,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/exercicios/$categoriaExercicio': typeof ExerciciosCategoriaExercicioRoute
+  '/perfil/$idUsuario': typeof PerfilIdUsuarioRoute
   '/tests/camera': typeof TestsCameraRoute
   '/aulas': typeof AulasIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/exercicios': typeof ExerciciosIndexRoute
   '/login': typeof LoginIndexRoute
+  '/perfil': typeof PerfilIndexRoute
+  '/ranking': typeof RankingIndexRoute
   '/register': typeof RegisterIndexRoute
   '/tests': typeof TestsIndexRoute
 }
@@ -178,11 +226,14 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/exercicios/$categoriaExercicio': typeof ExerciciosCategoriaExercicioRoute
+  '/perfil/$idUsuario': typeof PerfilIdUsuarioRoute
   '/tests/camera': typeof TestsCameraRoute
   '/aulas/': typeof AulasIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/exercicios/': typeof ExerciciosIndexRoute
   '/login/': typeof LoginIndexRoute
+  '/perfil/': typeof PerfilIndexRoute
+  '/ranking/': typeof RankingIndexRoute
   '/register/': typeof RegisterIndexRoute
   '/tests/': typeof TestsIndexRoute
 }
@@ -192,33 +243,42 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/exercicios/$categoriaExercicio'
+    | '/perfil/$idUsuario'
     | '/tests/camera'
     | '/aulas'
     | '/dashboard'
     | '/exercicios'
     | '/login'
+    | '/perfil'
+    | '/ranking'
     | '/register'
     | '/tests'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/exercicios/$categoriaExercicio'
+    | '/perfil/$idUsuario'
     | '/tests/camera'
     | '/aulas'
     | '/dashboard'
     | '/exercicios'
     | '/login'
+    | '/perfil'
+    | '/ranking'
     | '/register'
     | '/tests'
   id:
     | '__root__'
     | '/'
     | '/exercicios/$categoriaExercicio'
+    | '/perfil/$idUsuario'
     | '/tests/camera'
     | '/aulas/'
     | '/dashboard/'
     | '/exercicios/'
     | '/login/'
+    | '/perfil/'
+    | '/ranking/'
     | '/register/'
     | '/tests/'
   fileRoutesById: FileRoutesById
@@ -227,11 +287,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExerciciosCategoriaExercicioRoute: typeof ExerciciosCategoriaExercicioRoute
+  PerfilIdUsuarioRoute: typeof PerfilIdUsuarioRoute
   TestsCameraRoute: typeof TestsCameraRoute
   AulasIndexRoute: typeof AulasIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   ExerciciosIndexRoute: typeof ExerciciosIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
+  PerfilIndexRoute: typeof PerfilIndexRoute
+  RankingIndexRoute: typeof RankingIndexRoute
   RegisterIndexRoute: typeof RegisterIndexRoute
   TestsIndexRoute: typeof TestsIndexRoute
 }
@@ -239,11 +302,14 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExerciciosCategoriaExercicioRoute: ExerciciosCategoriaExercicioRoute,
+  PerfilIdUsuarioRoute: PerfilIdUsuarioRoute,
   TestsCameraRoute: TestsCameraRoute,
   AulasIndexRoute: AulasIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   ExerciciosIndexRoute: ExerciciosIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
+  PerfilIndexRoute: PerfilIndexRoute,
+  RankingIndexRoute: RankingIndexRoute,
   RegisterIndexRoute: RegisterIndexRoute,
   TestsIndexRoute: TestsIndexRoute,
 }
@@ -260,11 +326,14 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/exercicios/$categoriaExercicio",
+        "/perfil/$idUsuario",
         "/tests/camera",
         "/aulas/",
         "/dashboard/",
         "/exercicios/",
         "/login/",
+        "/perfil/",
+        "/ranking/",
         "/register/",
         "/tests/"
       ]
@@ -274,6 +343,9 @@ export const routeTree = rootRoute
     },
     "/exercicios/$categoriaExercicio": {
       "filePath": "exercicios/$categoriaExercicio.tsx"
+    },
+    "/perfil/$idUsuario": {
+      "filePath": "perfil/$idUsuario.tsx"
     },
     "/tests/camera": {
       "filePath": "tests/camera.tsx"
@@ -289,6 +361,12 @@ export const routeTree = rootRoute
     },
     "/login/": {
       "filePath": "login/index.tsx"
+    },
+    "/perfil/": {
+      "filePath": "perfil/index.tsx"
+    },
+    "/ranking/": {
+      "filePath": "ranking/index.tsx"
     },
     "/register/": {
       "filePath": "register/index.tsx"

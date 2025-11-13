@@ -1,15 +1,16 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, ResponseType } from "axios";
 
 export interface requestProps {
     method: string,
     path: string
     subpath?: string,
     dataValues?: object,
-    headers?: object
+    headers?: object,
+    responseType?: ResponseType,
+    params?: object
 }
 
 class AxiosConnection {
-
     private axioConnection: AxiosInstance;
 
     constructor() {
@@ -21,17 +22,30 @@ class AxiosConnection {
             },
 
         })
+
+        this.axioConnection.interceptors.request.use((config) => {
+            const token = localStorage.getItem('token')
+
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`
+            }
+
+            return config;
+        })
     }
 
-    async useAxiosConnection({ method, path, subpath, dataValues, headers={} }: requestProps) {
+    async useAxiosConnection({ method, path, subpath, dataValues, headers={}, responseType='json', params }: requestProps) {
 
-        
+
         let finalPath = path;
         if (subpath) finalPath += `/${subpath}`
 
         if (method === 'GET') {
             try {
-                const { data } = await this.axioConnection.get(finalPath)
+                const { data } = await this.axioConnection.get(finalPath,{
+                    responseType: responseType,
+                    params: params
+                })
                 return data
 
             } catch (error) {
@@ -53,12 +67,16 @@ class AxiosConnection {
 
         }
         if (method === 'PUT') {
-            return await this.axioConnection.put(finalPath)
+            return await this.axioConnection.put(finalPath ,dataValues, {
+                headers,
+            })
         }
         if (method === 'DELETE') {
             return await this.axioConnection.delete(finalPath)
         }
     }
+
+
 }
 
 export const backendConnection = new AxiosConnection()
