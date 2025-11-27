@@ -4,7 +4,7 @@ Facilibras é uma aplicação web para ensino e prática de Libras (Língua Bras
 
 ## Funcionalidades
 
-- Exercícios interativos de Libras (meses do ano, dias da semana, animais, frutas, etc)
+- Exercícios interativos de Libras (Alfabeto, Números, Alimentos, etc)
 - Reconhecimento de gestos via webcam
 - Dashboard com progresso do usuário
 - Ranking de usuários
