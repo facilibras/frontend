@@ -91,7 +91,7 @@ function RouteComponent() {
                 }
                   
                 }
-                className={`rounded-full border text-sm shadow-sm transition-all dark:bg-gray-600 dark:text-white ${highContrastBorder } 
+                className={`rounded-full border text-sm shadow-sm transition-all dark:bg-gray-600 dark:text-white ${highContrastBorder } cursor-pointer
                   
                   ${secaoSelecionada === secao.nome
                     ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-800"
@@ -168,15 +168,16 @@ function RouteComponent() {
                 <div className="p-4">
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="text-xl text-center capitalize font-semibold text-gray-800 dark:text-white mb-2">
-                      {exercicio.titulo.split("_")[0]}{" "}
-                      {exercicio.titulo.split("_")[1]}
+                      {exercicio.titulo.split("_").join(" ")}
                     </h3>
                     <div>
-                      {exercicio.status == null ? (
-                        <Hourglass color="red" size={20} />
-                      ) : (
-                        <CheckCheck color="green" />
-                      )}
+                      {
+                        exercicio.status == null || exercicio.status == "I" ? (
+                          <Hourglass color="red" size={20} />
+                        ) : (
+                          <CheckCheck color="green" />
+                        )
+                      }
                     </div>
                   </div>
                   <div className="flex justify-between items-center">

@@ -28,7 +28,11 @@ function RouteComponent() {
     senhaVerficador: '',
     readyToSend: false
   })
-
+  useEffect(() => {
+      if (localStorage.getItem('token')){
+        window.location.href = '/dashboard'
+      }
+  },[])
   useEffect(() => {
     const isEqual = CadastroValues.senha === CadastroValues.senhaVerficador
     setVerificadoSenha({ ...verificadorSenha, isEqual: isEqual })

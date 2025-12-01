@@ -5,13 +5,19 @@ import { Button } from '../../components/ui/button'
 import { useUserStore } from '../../store/user'
 import { toast } from 'react-toastify'
 import { LockKeyhole, Mail, Eye, EyeOff } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/login/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+
+  useEffect(() => {
+      if (localStorage.getItem('token')){
+        window.location.href = '/dashboard'
+      }
+  },[])
 
   const { actions: { addUser } } = useUserStore();
   const navigate = useNavigate({from: '/login'})
@@ -46,7 +52,8 @@ function RouteComponent() {
         navigate({to: '/dashboard' });
       }
       else{
-        toast.error(data.data.detail || "Erro ao fazer login. Tente novamente.");
+        console.log(data)
+        toast.error(data.response.data.detail || "Erro ao fazer login. Tente novamente.");
       }
     } catch (error: any) {
       const errorMessage = error?.response?.data?.detail || "Erro ao fazer login. Tente novamente.";
@@ -57,9 +64,9 @@ function RouteComponent() {
 
 
   return (
-    <div className='p-6 flex w-full justify-center items-center h-screen bg-gradient-to-tr from-indigo-100 to-blue-400'>
+    <div className='p-6 flex w-full justify-center items-center h-screen bg-gradient-to-tr from-indigo-100 to-blue-400 highcontrast:text-white highcontrast:from-gray-700 highcontrast:to-gray-800'>
 
-      <div className='min-w-[320px] w-full max-w-[640px] h-fit bg-gray-200 rounded-2xl shadow-2xl flex flex-col gap-4 p-8 '>
+      <div className='min-w-[320px] w-full max-w-[640px] h-fit bg-gray-200 highcontrast:bg-black rounded-2xl shadow-2xl flex flex-col gap-4 p-8 '>
 
         <div>
           <p className='font-bold text-center text-2xl'> Faça Login na sua conta!</p>
@@ -122,12 +129,8 @@ function RouteComponent() {
 
         <div className='flex flex-col items-start justify-center gap-2'>
           <p>Ainda não faz parte? <Link to='/register'> <span className='underline'>Cadastre-se</span></Link></p>
-
-          <small className='text-red-800 text-sm'>Esqueceu a senha? <span className='underline'>Clique aqui</span></small>
         </div>
-
       </div>
-
     </div>
   )
 }

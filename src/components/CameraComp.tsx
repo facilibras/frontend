@@ -5,7 +5,7 @@ import { backendConnection } from "../utils/axios"
 import { toast } from "react-toastify"
 
 export interface ResponseUpload {
-  sucesso: boolean,
+  sucesso: boolean | null,
   feedback : Feedback[]
 }
 interface Feedback {

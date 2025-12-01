@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           <main className="w-full">
             <DefaultNavBar />
             {children}
-            <Footer />
+            {/* <Footer /> */}
           </main>
         </div>
       </div>

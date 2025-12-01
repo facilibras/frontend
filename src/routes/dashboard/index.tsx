@@ -10,6 +10,8 @@ import { usuario } from '../../const/usuario.conts'
 import { useEffect, useState } from 'react'
 import { getUser } from '../../Services/getUser'
 import { highContrastBorder} from '../../const/highcontrat.const'
+import { categorias } from '../../const/categorias.const'
+import noUser from '../../assets/noUser.webp'
 
 export const Route = createFileRoute('/dashboard/')({
     component: () => (
@@ -40,7 +42,6 @@ function RouteComponent() {
     })
     const [imageUrl, setImageUrl] = useState<null | string>(null);
     const UserName = user?.nome_usuario || 'Convidado'
-    const Nivel = 'Iniciante'
 
     useEffect(() => {
 
@@ -53,14 +54,11 @@ function RouteComponent() {
 
         const imagemData = userInfo.imagemPerfil;
 
-
         if (imagemData && typeof imagemData !== 'string') {
-
+            
             const blob = new Blob([imagemData], { type: 'image/jpeg' });
-
             const url = URL.createObjectURL(blob);
             setImageUrl(url);
-
             return () => {
                 URL.revokeObjectURL(url);
             };
@@ -68,22 +66,20 @@ function RouteComponent() {
 
     }, [userInfo.imagemPerfil]);
 
-
-
     return <Layout>
-        <div className='flex flex-col'>
-            <div className=' flex flex-wrap lg:flex-nowrap mb-5'>
-                <div className={`bg-blue-600 ${highContrastBorder} rounded-3xl w-full h-auto m-2 p-4`}>
+        <div className='flex flex-col lg:pl-8 lg:pr-8'>
+            <div className=' flex flex-wrap lg:flex-nowrap gap-6 mb-3'>
+                <div className={`bg-blue-600 ${highContrastBorder} rounded-3xl flex flex-col items-center w-full h-auto m-2 p-4 lg:pl-8 lg:pr-8`}>
                     <div className='flex w-full items-center justify-center'>
 
                         {
                             typeof (userInfo.imagemPerfil) === 'string' ?
                                 React.createElement("div", {
                                     dangerouslySetInnerHTML: { __html: userInfo.imagemPerfil },
-                                    className: "w-32 h-32 "
+                                    className: "w-32 h-32"
                                 }) :
 
-                                <img src={imageUrl ?? ""} alt="Foto de perfil"
+                                <img src={imageUrl ?? noUser} alt="Foto de perfil"
                                     className="w-32 h-32 rounded-full border-4 border-white shadow-md"
                                 />
                         }
@@ -91,10 +87,10 @@ function RouteComponent() {
                         <div className='ml-2'>
                             <p className='font-bold text-2xl lg:text-3xl text-white highcontrast:text-yellow-300'> Bem Vindo {UserName.split(" ")[0]}</p>
                             <p className='text-white highcontrast:text-yellow-300 text-2xl'> Nível : {userInfo.progresso.nivel}</p>
-                            <p className='text-white highcontrast:text-yellow-300 text-2xl'> Categoria : {userInfo.progresso.nivel}</p>
+                            <p className='text-white highcontrast:text-yellow-300 text-2xl'> Categoria : {categorias[userInfo.progresso.nivel.toString() as keyof typeof categorias]}</p>
                         </div>
                     </div>
-                    <div className='m-3 mt-8 w-2/3'> {/* Progresso do usuario */}
+                    <div className='mt-8 w-2/3'> {/* Progresso do usuario */}
                         <div>
                             <div className='flex justify-between'>
                                 <p className='text-white'>Exercicios</p> <p className='text-white font-bold'>{userInfo?.progresso.msgProgresso}</p>
@@ -123,10 +119,10 @@ function RouteComponent() {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-wrap lg:flex-nowrap gap-2 m-2'> {/* Botões */}
+            <div className='flex flex-wrap lg:flex-nowrap gap-6 m-2'> {/* Botões */}
                 <ButtonDashboard nome='Exercícios' Icone={Book} rota='/exercicios/' />
                 <ButtonDashboard nome='Ranking' Icone={AlignStartVertical} rota='/ranking/' />
-                <ButtonDashboard nome='Quiz Diário' Icone={Lightbulb} rota='/quiz/' />
+                {/* <ButtonDashboard nome='Quiz Diário' Icone={Lightbulb} rota='/quiz/' /> */}
             </div>
 
             <div className='flex items-center justify-items-start gap-2'>

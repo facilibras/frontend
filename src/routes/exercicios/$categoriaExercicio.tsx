@@ -6,7 +6,7 @@ import Layout from '../../components/Layout';
 import { useState, useEffect } from 'react';
 import { exercicio } from '../../const/exercicios.const';
 import { ProtectedRoute } from '../../components/ProtectedRoute';
-import { Loader, Camera, Video, Check, X } from 'lucide-react';
+import { Loader, Camera, Video, Check, X, TriangleAlert } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { ScrollArea } from '../../components/ui/scroll-area';
 import { Steps } from '../../components/Exercise/Page/Steps';
@@ -32,7 +32,8 @@ function RouteComponent() {
         titulo: ''
     })
     const [realizandoExercicio, setRealizandoExercicio] = useState(false)
-    const [respostaRecinhecido, setRespostaReconhecimento] = useState<ResponseUpload>({ sucesso: false, feedback: [] })
+    const [respostaRecinhecido, setRespostaReconhecimento] = useState<ResponseUpload>({ sucesso: null, feedback: [] })
+    const [porcentagem, setPorcentagem] = useState("0%")
     const [listaVariacoes, setListaVariacoes] = useState<exercicio[]>([])
     const [exercicio, setExercicio] = useState<exercicio>({
         descricao: '',
@@ -42,12 +43,15 @@ function RouteComponent() {
         proxTarefa: null,
         secao: '',
         status: null,
-        titulo: '',
+        titulo: '_ _',
         ehVariacao: false,
         variacao: '',
 
     })
 
+    useEffect(() => {
+        respostaRecinhecido.feedback.length > 0 && setPorcentagem(((respostaRecinhecido.feedback.filter(f => f.correto).length / respostaRecinhecido.feedback.length) * 100).toFixed(0) + "%")
+    }, [respostaRecinhecido])
 
     async function getExercicio() {
 
@@ -101,27 +105,27 @@ function RouteComponent() {
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <Link to='/exercicios' className='text-blue-600 hover:text-blue-800 transition flex items-center'> Voltar para exercícios </Link>
-                                <span className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full capitalize"> {exercicio.secao} </span>
+                                <Link to='/exercicios' className='text-blue-600 hover:text-blue-800 transition flex items-center'>
+                                    Voltar para exercícios
+                                </Link>
+                                <span className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full capitalize">
+                                    {exercicio.secao}
+                                </span>
                             </div>
-                            <h2 className="text-3xl md:text-4xl font-bold capitalize text-gray-800 mb-2 dark:text-white">Exercício:
+                            <h2 className="text-3xl md:text-4xl font-bold capitalize text-gray-800 mb-2 dark:text-white highcontrast:text-white">Exercício:
                                 {" "}
-                                {exercicio.titulo.split('_')[0]}
-                                {" "}
-                                {exercicio.titulo.split("_")[1]}
+                                {exercicio.titulo.split('_').join(" ")}
                             </h2>
-                            <p className="text-lg text-gray-600 dark:text-white"> Aprenda e pratique o sinal de saudação básica em Libras.</p>
+                            <p className="text-lg text-gray-600 highcontrast:text-white dark:text-white">
+                                Aprenda e pratique o sinal de saudação básica em Libras.
+                            </p>
                         </div>
 
-                        {/* <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4">
                             <div className="flex items-center bg-blue-50 px-3 py-2 rounded-lg">
-                                <Star fill='#fcc800' className="mr-2" />
-                                <span className="font-medium">Dificuldade: <span className="text-blue-600">Fácil</span></span>
+                                <span className="font-medium">Categoria: <span className="text-blue-600"> {exercicio.secao} </span></span>
                             </div>
-                            <div className="flex items-center bg-green-50 px-3 py-2 rounded-lg">
-                                <span className="font-medium">Completado: <span className="text-green-600">3 vezes</span></span>
-                            </div>
-                        </div> */}
+                        </div>
                     </div>
                 </section>
 
@@ -184,8 +188,8 @@ function RouteComponent() {
 
 
                                 {/* <!-- Área do Feedback --> */}
-                                <div>
-                                    <div className="pl-4 relative vertical-divider">
+                                <div className='flex flex-col justify-between'>
+                                    <div className="pl-4 relative flex flex-col justify-between">
                                         <div className="mb-4">
                                             <h4 className="font-medium text-gray-700"> Feedback do sistema </h4>
                                             <p className="text-sm text-gray-500">Nosso sistema irá analisar seu sinal e dar feedback
@@ -193,18 +197,45 @@ function RouteComponent() {
                                         </div>
 
                                         {/* <!-- Barra de Progresso --> */}
-                                        <div className="w-full flex flex-col justify-center">
-                                            {realizandoExercicio && <Loader className='animate-spin' />}
-                                            <div>
+                                        <div className="w-full flex flex-col justify-center shadow-xl border-2 rounded-xl p-2">
+                                            <div className='p-2'>
                                                 {
-                                                    respostaRecinhecido.sucesso ?
-                                                        <p className='text-green-600 font-bold'> Parabéns Você Realizou o Sinal Corretamente</p> :
-                                                        <p className='text-red-600 font-bold'> Sinal Não Reconhecido Tente Novamente </p>
+                                                    respostaRecinhecido?.sucesso != null ?
+
+                                                        respostaRecinhecido.sucesso ?
+                                                            (
+                                                                <div className='flex justify-center items-center flex-col gap-2'>
+                                                                    <p className='text-green-600 font-bold'> Parabéns Você Realizou o Sinal Corretamente</p>
+                                                                    <hr className='border-gray-400 box-border w-full'/>
+                                                                </div>
+                                                            ) :
+                                                            (
+                                                                <div className='flex justify-center items-center flex-col gap-2'>
+                                                                    <TriangleAlert color='red' />
+                                                                    <div className='flex flex-col items-center'>
+                                                                        <p className='text-red-600 font-bold'> Sinal Não Reconhecido Tente Novamente </p>
+                                                                        <p> Opa, Algo saiu diferente !</p>
+                                                                    </div>
+                                                                    <hr className='border-gray-400 box-border w-full'/>
+                                                                </div>
+                                                            )
+
+                                                        : ""
+
+
+
                                                 }
                                             </div>
 
 
-                                            <ScrollArea className="sm:max-w-lg max-w-sm max-h-72 rounded-md mt-6">
+                                            <ScrollArea className="sm:max-w-lg max-w-sm max-h-72 rounded-md mt-6 h-72">
+                                                {realizandoExercicio &&
+                                                    (
+                                                        <div className="flex justify-center items-center h-full w-full">
+                                                            <Loader className='animate-spin' size={50} />
+                                                        </div>
+                                                    )
+                                                }
                                                 <div className='flex flex-col'>
                                                     {
                                                         respostaRecinhecido.feedback.map((feed, index) => (
@@ -220,6 +251,21 @@ function RouteComponent() {
                                                     }
                                                 </div>
                                             </ScrollArea>
+
+
+                                            <div className='p-4'>
+                                                <div className='bg-gray-500 w-full h-2 rounded-xl'>
+                                                    <div className={`bg-black h-full rounded-xl highcontrast:bg-yellow-300`}
+                                                        style={{ width: porcentagem, backgroundColor: respostaRecinhecido.sucesso ? 'green' : 'red' }}
+                                                    ></div>
+                                                </div>
+                                                <div className='flex justify-between'>
+                                                    <p>0%</p>
+                                                    <p>50%</p>
+                                                    <p>100%</p>
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                         {/* <!-- Dicas --> */}
@@ -245,7 +291,7 @@ function RouteComponent() {
                     </div>
                 </section>
 
-                <Steps exercicio={exercicio}/>
+                <Steps exercicio={exercicio} />
             </main>
         </div>
     </Layout>

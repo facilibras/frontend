@@ -59,8 +59,7 @@ export function DialogUserInfo({ nome }: { nome: string }) {
         console.log(userInfo)
     }, [userInfo])
 
-    const selectColor = (color: string) => {
-
+    const selectColor = (color: string) => {    
         setUser({ ...userInfo, cor_img_fundo: `from-${color}-700 to-${color}-400` })
         setSelectedColor(color)
     }
@@ -72,7 +71,7 @@ export function DialogUserInfo({ nome }: { nome: string }) {
                     <Pen />
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md lg:max-w-lg">
                 <DialogHeader>
                     <DialogTitle>Informações do úsuario</DialogTitle>
                     <DialogDescription>
@@ -80,7 +79,7 @@ export function DialogUserInfo({ nome }: { nome: string }) {
                         Essas informações serão visíveis para outros usuários.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex flex-col  items-center gap-2">
+                <div className="flex flex-col items-center gap-2">
                     <div className="flex flex-col flex-1 gap-2 w-full">
                         <Label htmlFor="nome" >
                             Nome
@@ -88,11 +87,12 @@ export function DialogUserInfo({ nome }: { nome: string }) {
                         <Input
                             id="nome"
                             defaultValue={nome}
+                            onChange={(e) => setUser({ ...userInfo, apelido: e.target.value})}
                         />
                     </div>
 
                     <div className="flex flex-col flex-1 gap-2 w-full">
-                        <Label htmlFor="cor_de_fundo">
+                        <Label htmlFor="foto_de_perfil">
                             Foto de perfil
                         </Label>
                         <Input
@@ -102,18 +102,18 @@ export function DialogUserInfo({ nome }: { nome: string }) {
                         />
                     </div>
 
-                    <div className="flex flex-col flex-1 gap-2 w-full">
+                    <div className="flex flex-col items-center  flex-1 gap-2 w-full">
                         <Label htmlFor="cor_de_fundo">
                             Cor de fundo do perfil
                         </Label>
 
                         <div className="flex items-center gap-2">
                             <div
-                                className="w-8 h-8 bg-gradient-to-r from-blue-700 to-blue-400 relative cursor-pointer"
+                                className="w-8 lg:w-16 h-8 bg-gradient-to-r from-blue-700 to-blue-400 relative cursor-pointer"
                                 onClick={() => selectColor('blue')}
                                 aria-label="Selecionar azul"
                             >
-                                <div className={selectedColor === 'blue' ? 'border-blue-900 border-4 w-8 h-8 relative flex items-start justify-start' : 'border-blue-900 border-4 w-8 h-8 relative hidden'}>
+                                <div className={selectedColor === 'blue' ? 'border-blue-900 border-4 w-8 lg:w-16 h-8 relative flex items-start justify-start' : 'border-blue-900 border-4 w-8 h-8 relative hidden'}>
                                     <div className="bg-blue-900 absolute w-2 h-2 right-0 top-0 flex items-center justify-center">
                                         <Check color="white" size={nineOrTen()} />
                                     </div>
@@ -121,11 +121,11 @@ export function DialogUserInfo({ nome }: { nome: string }) {
                             </div>
 
                             <div
-                                className="w-8 h-8 bg-gradient-to-r from-red-700 to-red-400 relative cursor-pointer"
+                                className="w-8 lg:w-16 h-8 bg-gradient-to-r from-red-700 to-red-400 relative cursor-pointer"
                                 onClick={() => selectColor('red')}
                                 aria-label="Selecionar vermelho"
                             >
-                                <div className={selectedColor === 'red' ? 'border-red-900 border-4 w-8 h-8 relative flex items-start justify-start' : 'border-red-900 border-4 w-8 h-8 relative hidden'}>
+                                <div className={selectedColor === 'red' ? 'border-red-900 border-4 w-8 lg:w-16 h-8 relative flex items-start justify-start' : 'border-red-900 border-4 w-8 h-8 relative hidden'}>
                                     <div className="bg-red-900 absolute w-2 h-2 right-0 top-0 flex items-center justify-center">
                                         <Check color="white" size={9} />
                                     </div>
@@ -133,11 +133,11 @@ export function DialogUserInfo({ nome }: { nome: string }) {
                             </div>
 
                             <div
-                                className="w-8 h-8 bg-gradient-to-r from-purple-700 to-purple-400 relative cursor-pointer"
+                                className="w-8 lg:w-16 h-8 bg-gradient-to-r from-purple-700 to-purple-400 relative cursor-pointer"
                                 onClick={() => selectColor('purple')}
                                 aria-label="Selecionar roxo"
                             >
-                                <div className={selectedColor === 'purple' ? 'border-purple-900 border-4 w-8 h-8 relative flex items-start justify-start' : 'border-purple-900 border-4 w-8 h-8 relative hidden'}>
+                                <div className={selectedColor === 'purple' ? 'border-purple-900 border-4 w-8 lg:w-16 h-8 relative flex items-start justify-start' : 'border-purple-900 border-4 w-8 h-8 relative hidden'}>
                                     <div className="bg-purple-900 absolute w-2 h-2 right-0 top-0 flex items-center justify-center">
                                         <Check color="white" size={9} />
                                     </div>
@@ -145,11 +145,11 @@ export function DialogUserInfo({ nome }: { nome: string }) {
                             </div>
 
                             <div
-                                className="w-8 h-8 bg-gradient-to-r from-green-700 to-green-400 relative cursor-pointer"
+                                className="w-8 lg:w-16 h-8 bg-gradient-to-r from-green-700 to-green-400 relative cursor-pointer"
                                 onClick={() => selectColor('green')}
                                 aria-label="Selecionar verde"
                             >
-                                <div className={selectedColor === 'green' ? 'border-green-900 border-4 w-8 h-8 relative flex items-start justify-start' : 'border-green-900 border-4 w-8 h-8 relative hidden'}>
+                                <div className={selectedColor === 'green' ? 'border-green-900 border-4 w-8 lg:w-16 h-8 relative flex items-start justify-start' : 'border-green-900 border-4 w-8 h-8 relative hidden'}>
                                     <div className="bg-green-900 absolute w-2 h-2 right-0 top-0 flex items-center justify-center">
                                         <Check color="white" size={9} />
                                     </div>
@@ -157,11 +157,11 @@ export function DialogUserInfo({ nome }: { nome: string }) {
                             </div>
 
                             <div
-                                className="w-8 h-8 bg-gradient-to-r from-cyan-700 to-cyan-400 relative cursor-pointer"
+                                className="w-8 lg:w-16 h-8 bg-gradient-to-r from-cyan-700 to-cyan-400 relative cursor-pointer"
                                 onClick={() => selectColor('cyan')}
                                 aria-label="Selecionar ciano"
                             >
-                                <div className={selectedColor === 'cyan' ? 'border-cyan-900 border-4 w-8 h-8 relative flex items-start justify-start' : 'border-cyan-900 border-4 w-8 h-8 relative hidden'}>
+                                <div className={selectedColor === 'cyan' ? 'border-cyan-900 border-4 w-8 lg:w-16 h-8 relative flex items-start justify-start' : 'border-cyan-900 border-4 w-8 h-8 relative hidden'}>
                                     <div className="bg-cyan-900 absolute w-2 h-2 right-0 top-0 flex items-center justify-center">
                                         <Check color="white" size={9} />
                                     </div>
@@ -169,11 +169,11 @@ export function DialogUserInfo({ nome }: { nome: string }) {
                             </div>
 
                             <div
-                                className="w-8 h-8 bg-gradient-to-r from-amber-700 to-amber-400 relative cursor-pointer"
+                                className="w-8 lg:w-16 h-8 bg-gradient-to-r from-amber-700 to-amber-400 relative cursor-pointer"
                                 onClick={() => selectColor('amber')}
                                 aria-label="Selecionar Âmbar"
                             >
-                                <div className={selectedColor === 'amber' ? 'border-amber-900 border-4 w-8 h-8 relative flex items-start justify-start' : 'border-amber-900 border-4 w-8 h-8 relative hidden'}>
+                                <div className={selectedColor === 'amber' ? 'border-amber-900 border-4 w-8 lg:w-16 h-8 relative flex items-start justify-start' : 'border-amber-900 border-4 w-8 h-8 relative hidden'}>
                                     <div className="bg-amber-900 absolute w-2 h-2 right-0 top-0 flex items-center justify-center">
                                         <Check color="white" size={9} />
                                     </div>

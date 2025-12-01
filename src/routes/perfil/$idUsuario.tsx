@@ -100,7 +100,7 @@ function RouteComponent() {
                             </div>
 
                             <div className="flex-1">
-                                <div className="flex md:flex-row md:items-center flex-wrap justify-between">
+                                <div className="flex md:items-center flex-wrap justify-between">
                                     <div>
                                         <h1 className="text-2xl font-bold text-gray-800"> {userInfo?.nomeOuApelido} </h1>
 
@@ -112,7 +112,7 @@ function RouteComponent() {
 
                             </div>
                             {/* <!-- Stats --> */}
-                            <div className="mt-4 flex flex-wrap gap-4 justify-end">
+                            <div className="flex w-2/5 flex-wrap gap-2 justify-end">
                                 <div className="flex items-center bg-blue-50 px-4 py-2 rounded-lg">
                                     <Medal color="#155dfc" className='mr-2' />
                                     <span className="font-medium">Nível: <span className="text-blue-600">{userInfo.progresso.nivel}</span></span>

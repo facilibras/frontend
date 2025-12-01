@@ -40,7 +40,7 @@ export const Steps = ({ exercicio }: ExercicioProps) => {
                         </Link>
 
 
-                        <a>
+                        <a className="cursor-pointer transition" href="#">
                             <div
                                 className="bg-purple-50 p-4 rounded-lg border border-purple-200 hover:border-purple-400 transition h-full">
                                 <div className="flex items-center gap-3 mb-3">
