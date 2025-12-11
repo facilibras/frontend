@@ -63,7 +63,6 @@ function RouteComponent() {
         if (getexercicio) {
 
             setExercicio(getexercicio)
-
             setVariacao({
                 instrucoes: getexercicio.descricao,
                 linkvideo: getexercicio.palavras[0].video,
@@ -183,6 +182,7 @@ function RouteComponent() {
                                         titulo={variacao.titulo}
                                         setRealizandoExercicio={setRealizandoExercicio}
                                         setRespostaReconhecimento={setRespostaReconhecimento}
+                                        tempGravacao={exercicio.secao == "frase" ? 7 : 5}
                                     />
                                 </div>
 
@@ -254,16 +254,16 @@ function RouteComponent() {
 
 
                                             <div className='p-4'>
-                                                <div className='bg-gray-500 w-full h-2 rounded-xl'>
+                                                <div className='flex justify-between'>
+                                                    <p>Porcentagem de acertos</p>
+                                                    <p>{porcentagem}</p>
+                                                </div>
+                                                <div className='bg-gray-300 w-full h-2 rounded-xl'>
                                                     <div className={`bg-black h-full rounded-xl highcontrast:bg-yellow-300`}
-                                                        style={{ width: porcentagem, backgroundColor: respostaRecinhecido.sucesso ? 'green' : 'red' }}
+                                                        style={{ width: porcentagem, backgroundColor:'green'}}
                                                     ></div>
                                                 </div>
-                                                <div className='flex justify-between'>
-                                                    <p>0%</p>
-                                                    <p>50%</p>
-                                                    <p>100%</p>
-                                                </div>
+                                                
                                             </div>
 
                                         </div>

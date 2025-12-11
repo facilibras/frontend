@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Book, Lightbulb, AlignStartVertical } from 'lucide-react'
+import { Book, AlignStartVertical } from 'lucide-react'
 import { ButtonDashboard } from '../../components/ButtonDashboard'
 import { useUserStore } from '../../store/user'
 import Layout from '../../components/Layout'
@@ -87,7 +87,7 @@ function RouteComponent() {
                         <div className='ml-2'>
                             <p className='font-bold text-2xl lg:text-3xl text-white highcontrast:text-yellow-300'> Bem Vindo {UserName.split(" ")[0]}</p>
                             <p className='text-white highcontrast:text-yellow-300 text-2xl'> Nível : {userInfo.progresso.nivel}</p>
-                            <p className='text-white highcontrast:text-yellow-300 text-2xl'> Categoria : {categorias[userInfo.progresso.nivel.toString() as keyof typeof categorias]}</p>
+                            <p className='text-white highcontrast:text-yellow-300 text-2xl'> {categorias[userInfo.progresso.nivel.toString() as keyof typeof categorias]}</p>
                         </div>
                     </div>
                     <div className='mt-8 w-2/3'> {/* Progresso do usuario */}

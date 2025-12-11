@@ -1,10 +1,8 @@
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../ui/dialog"
-import { Button } from "../ui/button"
 import { Circle, Settings } from "lucide-react"
 import { ThemeToggle } from "../ThemeToggle"
 import { useConfig } from "../../store/config"
 import { Toggle } from "../ui/toggle"
-import { BookmarkIcon } from "lucide-react"
 
 interface configProps {
     stateConfig: () => void,
@@ -19,9 +17,7 @@ export const ConfigDialog = () => {
 
         <Dialog>
             <DialogTrigger>
-                <Button className="rounded-full p-4 bg-black hover:bg-zinc-400 text-white hover:text-white">
-                    <Settings />
-                </Button>
+                    <Settings size={40} color="white" className="bg-black p-2 rounded-full cursor-pointer hover:bg-zinc-400 text-white hover:text-white" />
             </DialogTrigger>
             <DialogContent className="dark:bg-gray-700">
                 <DialogHeader className="">

@@ -1,4 +1,4 @@
-import {Hand, ALargeSmall, Apple, IdCardIcon, PersonStandingIcon} from "lucide-react"
+import {Hand, ALargeSmall, Apple, IdCardIcon, PersonStandingIcon, MessageCircleMore} from "lucide-react"
 
 interface Propriedades {
   texto: string,
@@ -62,11 +62,11 @@ export const categoriaColor: CategoriaCores = {
     hex: "#4F46E5"
   },
   "Frases":{
-    texto:"",
-    bg:"",
-    bgColor:"",
-    icon: Hand,
-    hex: ""
+    texto:"text-gray-600",
+    bg:"bg-gray-50",
+    bgColor:"bg-gray-600",
+    icon: MessageCircleMore,
+    hex: "#4B5563"
   },
   "Primeiro Sinal":{
     texto: "text-indigo-600",
