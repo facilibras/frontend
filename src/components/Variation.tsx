@@ -6,10 +6,10 @@ interface VariationProps {
 export default function Variation({ instrucoes, linkvideo }: VariationProps) {
 
     return (
-        <div id="variation1" className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="w-full p-4">
                 <div className="aspect-w-16 aspect-h-9 relative mb-4 video-placeholder">
-                    <div className="w-full h-64 bg-gray-200 flex items-center justify-center rounded-2xl">
+                    <div className="w-full h-96 bg-gray-200 flex items-center justify-center rounded-2xl">
                         <span className="absolute top-1 right-1 font-bold bg-blue-500 text-white rounded-sm p-1">Variação 1</span>
                         <iframe
                             src={linkvideo}

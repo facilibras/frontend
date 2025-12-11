@@ -92,7 +92,6 @@ function RouteComponent() {
 
     useEffect(() => {
         const funcao = async () => await getExercicio()
-
         funcao()
     }, [])
 
@@ -221,9 +220,6 @@ function RouteComponent() {
                                                             )
 
                                                         : ""
-
-
-
                                                 }
                                             </div>
 

@@ -77,7 +77,6 @@ export function AppSidebar() {
                                                 <p className="text-black capitalize dark:text-white highcontrast:text-yellow-300">
 
                                                     {exercicioFiltrado.titulo.split('_')[0]} {exercicioFiltrado.titulo.split("_")[1]} {exercicioFiltrado.titulo.split("_")[2] ? "- Variação" : ""}
-
                                                 </p>
                                             </Link>
                                         </div>
